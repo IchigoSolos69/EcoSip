@@ -394,3 +394,261 @@ revealStyle.textContent = `
     }
 `;
 document.head.appendChild(revealStyle);
+
+// 3D Bottle Model with Three.js
+class EcoSipBottle3D {
+    constructor() {
+        this.scene = null;
+        this.camera = null;
+        this.renderer = null;
+        this.bottle = null;
+        this.cap = null;
+        this.bottleGroup = null;
+        this.container = document.getElementById('bottle-3d-container');
+        this.canvas = document.getElementById('bottle-canvas');
+        
+        if (this.container && this.canvas) {
+            this.init();
+            this.createBottle();
+            this.setupLighting();
+            this.setupEventListeners();
+            this.animate();
+        }
+    }
+    
+    init() {
+        // Scene setup
+        this.scene = new THREE.Scene();
+        
+        // Camera setup
+        this.camera = new THREE.PerspectiveCamera(
+            50, 
+            this.container.offsetWidth / this.container.offsetHeight, 
+            0.1, 
+            1000
+        );
+        this.camera.position.set(0, 0, 6);
+        
+        // Renderer setup
+        this.renderer = new THREE.WebGLRenderer({ 
+            canvas: this.canvas,
+            alpha: true, 
+            antialias: true 
+        });
+        this.renderer.setSize(this.container.offsetWidth, this.container.offsetHeight);
+        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        this.renderer.shadowMap.enabled = true;
+        this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        
+        // Create bottle group for easier manipulation
+        this.bottleGroup = new THREE.Group();
+        this.scene.add(this.bottleGroup);
+    }
+    
+    createBottle() {
+        // Bottle body geometry - more realistic shape
+        const bottleGeometry = new THREE.CylinderGeometry(0.8, 1.0, 3.5, 32);
+        
+        // Bottle material with eco-friendly colors
+        const bottleMaterial = new THREE.MeshPhysicalMaterial({
+            color: 0x1de9b6,
+            metalness: 0.1,
+            roughness: 0.3,
+            transparent: true,
+            opacity: 0.7,
+            transmission: 0.9,
+            thickness: 0.5,
+            envMapIntensity: 1.0,
+            clearcoat: 1.0,
+            clearcoatRoughness: 0.1
+        });
+        
+        this.bottle = new THREE.Mesh(bottleGeometry, bottleMaterial);
+        this.bottle.castShadow = true;
+        this.bottle.receiveShadow = true;
+        this.bottleGroup.add(this.bottle);
+        
+        // Bottle cap
+        const capGeometry = new THREE.CylinderGeometry(0.82, 0.82, 0.6, 32);
+        const capMaterial = new THREE.MeshPhysicalMaterial({
+            color: 0x00ff99,
+            metalness: 0.8,
+            roughness: 0.2,
+            clearcoat: 1.0,
+            clearcoatRoughness: 0.1
+        });
+        
+        this.cap = new THREE.Mesh(capGeometry, capMaterial);
+        this.cap.position.y = 2.05;
+        this.cap.castShadow = true;
+        this.bottleGroup.add(this.cap);
+        
+        // Add EcoSip label
+        this.createLabel();
+        
+        // Add water inside bottle
+        this.createWater();
+        
+        // Position bottle group
+        this.bottleGroup.position.y = -0.5;
+        this.bottleGroup.rotation.y = Math.PI * 0.1;
+    }
+    
+    createLabel() {
+        // Create a simple text label using geometry
+        const labelGeometry = new THREE.PlaneGeometry(1.5, 0.8);
+        const labelMaterial = new THREE.MeshBasicMaterial({
+            color: 0x00ff88,
+            transparent: true,
+            opacity: 0.8
+        });
+        
+        const label = new THREE.Mesh(labelGeometry, labelMaterial);
+        label.position.set(0, 0.5, 0.85);
+        this.bottleGroup.add(label);
+        
+        // Add text using CSS3DRenderer alternative - simple geometric text
+        const textGeometry = new THREE.RingGeometry(0.1, 0.2, 8);
+        const textMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
+        const textMesh = new THREE.Mesh(textGeometry, textMaterial);
+        textMesh.position.set(0, 0.5, 0.86);
+        this.bottleGroup.add(textMesh);
+    }
+    
+    createWater() {
+        // Water inside bottle
+        const waterGeometry = new THREE.CylinderGeometry(0.75, 0.95, 2.8, 32);
+        const waterMaterial = new THREE.MeshPhysicalMaterial({
+            color: 0x00d4ff,
+            transparent: true,
+            opacity: 0.3,
+            transmission: 1.0,
+            thickness: 0.2,
+            roughness: 0.0,
+            metalness: 0.0
+        });
+        
+        const water = new THREE.Mesh(waterGeometry, waterMaterial);
+        water.position.y = -0.2;
+        this.bottleGroup.add(water);
+    }
+    
+    setupLighting() {
+        // Ambient light
+        const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
+        this.scene.add(ambientLight);
+        
+        // Main directional light
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
+        directionalLight.position.set(5, 5, 5);
+        directionalLight.castShadow = true;
+        directionalLight.shadow.mapSize.width = 2048;
+        directionalLight.shadow.mapSize.height = 2048;
+        this.scene.add(directionalLight);
+        
+        // Accent lights for neon effect
+        const neonLight1 = new THREE.PointLight(0x00ff88, 0.8, 10);
+        neonLight1.position.set(-3, 2, 3);
+        this.scene.add(neonLight1);
+        
+        const neonLight2 = new THREE.PointLight(0x00d4ff, 0.8, 10);
+        neonLight2.position.set(3, -2, 3);
+        this.scene.add(neonLight2);
+    }
+    
+    setupEventListeners() {
+        // Scroll-based cap animation
+        window.addEventListener('scroll', () => {
+            const scrollProgress = Math.min(window.scrollY / (window.innerHeight * 0.5), 1);
+            
+            if (this.cap) {
+                // Cap opens as user scrolls
+                this.cap.position.y = 2.05 + (scrollProgress * 0.8);
+                this.cap.rotation.z = scrollProgress * Math.PI * 0.3;
+            }
+            
+            // Bottle rotation based on scroll
+            if (this.bottleGroup) {
+                this.bottleGroup.rotation.y = Math.PI * 0.1 + (scrollProgress * Math.PI * 0.5);
+            }
+        });
+        
+        // Mouse interaction
+        let mouseX = 0;
+        let mouseY = 0;
+        
+        this.container.addEventListener('mousemove', (event) => {
+            const rect = this.container.getBoundingClientRect();
+            mouseX = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+            mouseY = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+        });
+        
+        // Apply mouse movement to bottle rotation
+        const updateMouseRotation = () => {
+            if (this.bottleGroup) {
+                this.bottleGroup.rotation.x += (mouseY * 0.1 - this.bottleGroup.rotation.x) * 0.05;
+                this.bottleGroup.rotation.y += (mouseX * 0.2 + Math.PI * 0.1 - this.bottleGroup.rotation.y) * 0.05;
+            }
+        };
+        
+        // Resize handler
+        window.addEventListener('resize', () => {
+            if (this.container && this.camera && this.renderer) {
+                const width = this.container.offsetWidth;
+                const height = this.container.offsetHeight;
+                
+                this.camera.aspect = width / height;
+                this.camera.updateProjectionMatrix();
+                this.renderer.setSize(width, height);
+                this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            }
+        });
+        
+        // Store mouse update function for animation loop
+        this.updateMouseRotation = updateMouseRotation;
+    }
+    
+    animate() {
+        requestAnimationFrame(() => this.animate());
+        
+        // Auto rotation when not interacting
+        if (this.bottleGroup) {
+            this.bottleGroup.rotation.y += 0.005;
+        }
+        
+        // Apply mouse interaction
+        if (this.updateMouseRotation) {
+            this.updateMouseRotation();
+        }
+        
+        // Floating animation enhancement
+        if (this.bottleGroup) {
+            this.bottleGroup.position.y = -0.5 + Math.sin(Date.now() * 0.001) * 0.1;
+        }
+        
+        // Render scene
+        this.renderer.render(this.scene, this.camera);
+    }
+}
+
+// Initialize 3D bottle when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    // Wait a bit for Three.js to load
+    setTimeout(() => {
+        if (typeof THREE !== 'undefined') {
+            new EcoSipBottle3D();
+        } else {
+            console.warn('Three.js not loaded, falling back to 2D bottle');
+            // Fallback to 2D bottle if Three.js fails to load
+            const container = document.getElementById('bottle-3d-container');
+            if (container) {
+                container.innerHTML = `
+                    <div class="floating-bottle">
+                        <div class="bottle-glow"></div>
+                        <div class="bottle-shape"></div>
+                    </div>
+                `;
+            }
+        }
+    }, 100);
+});

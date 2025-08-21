@@ -6,6 +6,7 @@
     <title>EcoSip - Sustainable Hydration Revolution</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
     <!-- Navigation -->
@@ -44,9 +45,8 @@
                 </div>
             </div>
             <div class="hero-visual">
-                <div class="floating-bottle">
-                    <div class="bottle-glow"></div>
-                    <div class="bottle-shape"></div>
+                <div id="bottle-3d-container" class="bottle-3d-container">
+                    <canvas id="bottle-canvas"></canvas>
                 </div>
                 <div class="floating-particles">
                     <div class="particle particle-1"></div>
