@@ -2301,5 +2301,186 @@ html, body {
 
 /* Ensure 3D canvas is on top of hero background */
 .hero-visual { position: relative; z-index: 1; }
-.three-stage { position: relative; z-index: 2; }
 .floating-particles { z-index: 3; pointer-events: none; }
+
+/* Interactive 2D Bottle */
+.interactive-bottle {
+    position: relative;
+    width: 400px;
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.bottle-container {
+    position: relative;
+    width: 200px;
+    height: 350px;
+    transform-style: preserve-3d;
+    transition: transform 0.3s ease;
+}
+
+.bottle-body {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.1) 0%,
+        rgba(0, 212, 255, 0.2) 30%,
+        rgba(0, 255, 136, 0.1) 70%,
+        rgba(255, 255, 255, 0.05) 100%);
+    border-radius: 20px 20px 60px 60px;
+    border: 2px solid rgba(0, 255, 136, 0.3);
+    box-shadow: 
+        0 0 30px rgba(0, 255, 136, 0.2),
+        inset 0 0 20px rgba(0, 212, 255, 0.1);
+    overflow: hidden;
+}
+
+.bottle-neck {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 40px;
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.1) 0%,
+        rgba(0, 212, 255, 0.2) 50%,
+        rgba(0, 255, 136, 0.1) 100%);
+    border-radius: 30px 30px 0 0;
+    border: 2px solid rgba(0, 255, 136, 0.3);
+    border-bottom: none;
+}
+
+.bottle-cap {
+    position: absolute;
+    top: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70px;
+    height: 50px;
+    transform-origin: bottom center;
+    transition: transform 0.5s ease;
+}
+
+.cap-top {
+    width: 100%;
+    height: 30px;
+    background: linear-gradient(135deg, #00ff88, #00d4ff);
+    border-radius: 35px 35px 0 0;
+    border: 2px solid rgba(0, 255, 136, 0.5);
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+}
+
+.cap-ring {
+    width: 100%;
+    height: 20px;
+    background: linear-gradient(135deg, #00d4ff, #00ff88);
+    border-radius: 0 0 35px 35px;
+    border: 2px solid rgba(0, 255, 136, 0.5);
+    border-top: none;
+}
+
+.bottle-cap.cap-open {
+    transform: translateX(-50%) rotateX(-90deg);
+}
+
+.bottle-water {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 60%;
+    background: linear-gradient(180deg, 
+        rgba(0, 212, 255, 0.6) 0%,
+        rgba(0, 255, 136, 0.4) 100%);
+    border-radius: 0 0 40px 40px;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    box-shadow: inset 0 0 20px rgba(0, 212, 255, 0.3);
+}
+
+.bottle-water.water-visible {
+    opacity: 1;
+}
+
+.bottle-logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle, rgba(0, 255, 136, 0.2), transparent);
+    border-radius: 50%;
+    border: 2px solid rgba(0, 255, 136, 0.3);
+}
+
+.bottle-logo img {
+    width: 40px;
+    height: 40px;
+    filter: drop-shadow(0 0 10px rgba(0, 255, 136, 0.5));
+}
+
+.bottle-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(ellipse at center, 
+        rgba(0, 255, 136, 0.1) 0%, 
+        transparent 70%);
+    border-radius: inherit;
+    pointer-events: none;
+    animation: glow-pulse 3s ease-in-out infinite;
+}
+
+.bottle-reflection {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    height: 40%;
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.2) 0%,
+        transparent 50%);
+    border-radius: 15px 15px 0 0;
+    pointer-events: none;
+}
+
+@keyframes glow-pulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .interactive-bottle {
+        width: 300px;
+        height: 400px;
+    }
+    
+    .bottle-container {
+        width: 150px;
+        height: 280px;
+    }
+    
+    .bottle-logo {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .bottle-logo img {
+        width: 30px;
+        height: 30px;
+    }
+}
