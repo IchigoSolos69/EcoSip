@@ -2165,3 +2165,69 @@ textarea.form-input {
     padding: 0 0.5rem !important;
     transform: translateY(0) !important;
 }
+
+/* Global tweak to avoid accidental horizontal scroll */
+html, body {
+    overflow-x: hidden;
+}
+
+/* Product interactive styles */
+.product-card {
+    perspective: 1000px;
+}
+
+.product-image,
+.product-info {
+    transition: transform 0.5s ease, box-shadow 0.4s ease, filter 0.4s ease;
+    will-change: transform;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .product-card:hover .product-image {
+        transform: rotateY(12deg) translateY(-8px) scale(1.02);
+        filter: brightness(1.05);
+    }
+    .product-card:hover {
+        transform: translateY(-10px);
+    }
+}
+
+/* Reduce oversized buttons on mobile */
+.product-price .btn {
+    padding: 0.75rem 1.2rem;
+    border-radius: 14px;
+}
+
+@media (max-width: 768px) {
+    /* Nav/Menu fixes */
+    .navbar { height: 64px; }
+    .nav-container { padding: 0.75rem 16px; }
+    .nav-menu {
+        left: 0;
+        right: 0;
+        margin: 0 16px;
+        max-width: calc(100vw - 32px);
+        overflow-x: hidden;
+        z-index: 1001;
+    }
+
+    /* Hero spacing so it doesn't sit under the navbar */
+    .hero { padding-top: 6.5rem; }
+    .three-stage { height: 340px; margin-top: 0.25rem; }
+
+    /* About visual should not be sticky on mobile to avoid overlaps */
+    .about-visual { position: static; top: auto; transform: none; margin-top: 1rem; }
+
+    /* Stats spacing to avoid overlap with next sections */
+    .stats-section { margin: 2rem 0 1rem; grid-template-columns: 1fr; }
+
+    /* Buttons sizing on mobile */
+    .hero-buttons { gap: 0.75rem; }
+    .btn { width: auto; padding: 0.85rem 1.2rem; border-radius: 14px; }
+    .product-price { gap: 0.75rem; }
+    .product-price .btn { padding: 0.6rem 1rem; font-size: 0.95rem; border-radius: 12px; }
+
+    /* Product grid spacing */
+    .product-grid { grid-template-columns: 1fr; gap: 1.25rem; }
+    .product-card { border-radius: 18px; }
+}

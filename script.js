@@ -894,3 +894,40 @@ function updateOnScroll() {
 if (window.innerWidth <= 768) {
     window.addEventListener('scroll', updateOnScroll, { passive: true });
 }
+
+// Desktop-only tilt for product cards
+(function() {
+    const isDesktop = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    if (!isDesktop) return;
+    const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.product-card').forEach(card => {
+            const inner = card.querySelector('.product-image') || card;
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = (e.clientX - rect.left) / rect.width;
+                const y = (e.clientY - rect.top) / rect.height;
+                const rotY = clamp((x - 0.5) * 20, -14, 14);
+                const rotX = clamp((0.5 - y) * 14, -10, 10);
+                inner.style.transform = `rotateY(${rotY}deg) rotateX(${rotX}deg) translateY(-6px)`;
+            });
+            card.addEventListener('mouseleave', () => {
+                inner.style.transform = 'rotateY(0deg) rotateX(0deg) translateY(0)';
+            });
+        });
+    });
+})();
+
+// Ensure body doesn't expand on menu open
+(function() {
+    const mq = window.matchMedia('(max-width: 768px)');
+    const navMenu = document.querySelector('.nav-menu');
+    const toggle = document.querySelector('.mobile-menu-toggle');
+    if (!navMenu || !toggle) return;
+    const lock = () => document.documentElement.style.setProperty('overflow', 'hidden', 'important');
+    const unlock = () => document.documentElement.style.removeProperty('overflow');
+    toggle.addEventListener('click', () => {
+        if (navMenu.classList.contains('active')) lock(); else unlock();
+    });
+    window.addEventListener('resize', () => { if (!mq.matches) unlock(); });
+})();
