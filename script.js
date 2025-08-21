@@ -70,6 +70,22 @@ function animateCounter(element, target, duration = 2000) {
     }, 16);
 }
 
+// Rating animation for decimal ratings (like 4.9/5)
+function animateRating(element, target, maxRating, duration = 2000) {
+    let start = 0;
+    const increment = target / (duration / 16);
+    
+    const timer = setInterval(() => {
+        start += increment;
+        if (start >= target) {
+            element.textContent = target.toFixed(1) + '/' + maxRating;
+            clearInterval(timer);
+        } else {
+            element.textContent = start.toFixed(1) + '/' + maxRating;
+        }
+    }, 16);
+}
+
 // Trigger counter animations when stats section is visible
 const statsObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -77,6 +93,20 @@ const statsObserver = new IntersectionObserver((entries) => {
             const statNumbers = entry.target.querySelectorAll('.stat-number');
             statNumbers.forEach(stat => {
                 const text = stat.textContent;
+                
+                // Handle special case for rating format (4.9/5)
+                if (text.includes('/')) {
+                    const parts = text.split('/');
+                    if (parts.length === 2) {
+                        const rating = parseFloat(parts[0]);
+                        const maxRating = parseInt(parts[1]);
+                        stat.dataset.suffix = '/' + maxRating;
+                        animateRating(stat, rating, maxRating);
+                        return;
+                    }
+                }
+                
+                // Handle regular numbers
                 const number = parseInt(text.replace(/[^0-9]/g, ''));
                 const suffix = text.replace(/[0-9,]/g, '');
                 stat.dataset.suffix = suffix;
@@ -724,51 +754,63 @@ class EcoSipBottle3D {
     }
     
     createLogo() {
-        // Create EcoSip logo as embossed geometry
-        const logoGroup = new THREE.Group();
+        // Create EcoSip logo using texture from GitHub
+        const textureLoader = new THREE.TextureLoader();
         
-        // Main logo circle
-        const circleGeometry = new THREE.RingGeometry(0.4, 0.5, 32);
-        const circleMaterial = new THREE.MeshBasicMaterial({
-            color: 0x00ff88,
-            transparent: true,
-            opacity: 0.9
-        });
-        
-        const logoCircle = new THREE.Mesh(circleGeometry, circleMaterial);
-        logoCircle.position.set(0, 0.5, 0.85);
-        logoCircle.rotation.x = Math.PI / 2;
-        logoGroup.add(logoCircle);
-        
-        // Logo text "ES" using geometry
-        const textGeometry = new THREE.BoxGeometry(0.3, 0.1, 0.02);
-        const textMaterial = new THREE.MeshBasicMaterial({ 
-            color: 0x00ff88,
-            emissive: 0x00ff88,
-            emissiveIntensity: 0.3
-        });
-        
-        const logoText = new THREE.Mesh(textGeometry, textMaterial);
-        logoText.position.set(0, 0.5, 0.86);
-        logoGroup.add(logoText);
-        
-        // Add glow effect
-        const glowGeometry = new THREE.RingGeometry(0.45, 0.55, 32);
-        const glowMaterial = new THREE.MeshBasicMaterial({
-            color: 0x00ff88,
-            transparent: true,
-            opacity: 0.3,
-            emissive: 0x00ff88,
-            emissiveIntensity: 0.2
-        });
-        
-        const logoGlow = new THREE.Mesh(glowGeometry, glowMaterial);
-        logoGlow.position.set(0, 0.5, 0.84);
-        logoGlow.rotation.x = Math.PI / 2;
-        logoGroup.add(logoGlow);
-        
-        this.bottleGroup.add(logoGroup);
-        this.logoGroup = logoGroup;
+        textureLoader.load(
+            'https://github.com/IchigoSolos69/EcoSip/blob/e307b84636a79fdfb8c3d61d3ecca27ec50bf7ba/public/logo.png?raw=true',
+            (texture) => {
+                // Create logo plane with the loaded texture
+                const logoGeometry = new THREE.PlaneGeometry(1.0, 1.0);
+                const logoMaterial = new THREE.MeshBasicMaterial({
+                    map: texture,
+                    transparent: true,
+                    opacity: 0.9
+                });
+                
+                const logoMesh = new THREE.Mesh(logoGeometry, logoMaterial);
+                logoMesh.position.set(0, 0.5, 0.86);
+                this.bottleGroup.add(logoMesh);
+                
+                // Add glow effect behind the logo
+                const glowGeometry = new THREE.PlaneGeometry(1.2, 1.2);
+                const glowMaterial = new THREE.MeshBasicMaterial({
+                    color: 0x00ff88,
+                    transparent: true,
+                    opacity: 0.2,
+                    emissive: 0x00ff88,
+                    emissiveIntensity: 0.3
+                });
+                
+                const logoGlow = new THREE.Mesh(glowGeometry, glowMaterial);
+                logoGlow.position.set(0, 0.5, 0.85);
+                this.bottleGroup.add(logoGlow);
+                
+                this.logoGroup = new THREE.Group();
+                this.logoGroup.add(logoMesh);
+                this.logoGroup.add(logoGlow);
+                this.bottleGroup.add(this.logoGroup);
+            },
+            undefined,
+            (error) => {
+                console.warn('Could not load EcoSip logo texture, using fallback');
+                // Fallback to simple geometric logo
+                const fallbackGeometry = new THREE.RingGeometry(0.4, 0.5, 32);
+                const fallbackMaterial = new THREE.MeshBasicMaterial({
+                    color: 0x00ff88,
+                    transparent: true,
+                    opacity: 0.9
+                });
+                
+                const fallbackLogo = new THREE.Mesh(fallbackGeometry, fallbackMaterial);
+                fallbackLogo.position.set(0, 0.5, 0.85);
+                fallbackLogo.rotation.x = Math.PI / 2;
+                this.bottleGroup.add(fallbackLogo);
+                
+                this.logoGroup = new THREE.Group();
+                this.logoGroup.add(fallbackLogo);
+            }
+        );
     }
     
     setupLighting() {

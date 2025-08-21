@@ -68,11 +68,12 @@ body {
     filter: drop-shadow(0 0 10px rgba(0, 255, 136, 0.5));
 }
 
-.logo-icon svg {
+.logo-icon img {
     transition: all 0.3s ease;
+    border-radius: 50%;
 }
 
-.nav-logo:hover .logo-icon svg {
+.nav-logo:hover .logo-icon img {
     filter: drop-shadow(0 0 15px rgba(0, 255, 136, 0.8));
     transform: scale(1.05);
 }
@@ -1340,8 +1341,30 @@ textarea.form-input {
 .footer-content {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     margin-bottom: 2rem;
+}
+
+.footer-logo {
+    flex: 1;
+}
+
+.footer-logo-container {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+}
+
+.footer-logo-img {
+    border-radius: 50%;
+    filter: drop-shadow(0 0 8px rgba(0, 255, 136, 0.4));
+    transition: all 0.3s ease;
+}
+
+.footer-logo-img:hover {
+    filter: drop-shadow(0 0 12px rgba(0, 255, 136, 0.6));
+    transform: scale(1.05);
 }
 
 .footer-logo .logo-text {

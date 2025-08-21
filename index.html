@@ -4,10 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EcoSip - Sustainable Hydration Revolution</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='none' stroke='%2300ff88' stroke-width='3'/><text x='50' y='55' text-anchor='middle' font-family='Arial' font-size='12' fill='%2300ff88' font-weight='bold'>ES</text></svg>">
+    <link rel="icon" type="image/png" href="https://github.com/IchigoSolos69/EcoSip/blob/e307b84636a79fdfb8c3d61d3ecca27ec50bf7ba/public/logo.png?raw=true">
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
     <!-- Navigation -->
@@ -15,16 +14,7 @@
         <div class="nav-container">
             <div class="nav-logo">
                 <div class="logo-icon">
-                    <svg viewBox="0 0 100 100" width="40" height="40">
-                        <circle cx="50" cy="50" r="45" fill="none" stroke="url(#logoGradient)" stroke-width="3"/>
-                        <text x="50" y="55" text-anchor="middle" font-family="Arial" font-size="12" fill="url(#logoGradient)" font-weight="bold">ES</text>
-                        <defs>
-                            <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" style="stop-color:#00ff88"/>
-                                <stop offset="100%" style="stop-color:#00d4ff"/>
-                            </linearGradient>
-                        </defs>
-                    </svg>
+                    <img src="https://github.com/IchigoSolos69/EcoSip/blob/e307b84636a79fdfb8c3d61d3ecca27ec50bf7ba/public/logo.png?raw=true" alt="EcoSip Logo" width="40" height="40">
                 </div>
                 <span class="logo-text">EcoSip</span>
                 <div class="logo-glow"></div>
@@ -63,8 +53,19 @@
                 </div>
             </div>
             <div class="hero-visual">
-                <div id="bottle-3d-container" class="bottle-3d-container">
-                    <canvas id="bottle-canvas"></canvas>
+                <div class="hero-bottle">
+                    <div class="bottle-container">
+                        <div class="bottle-shape">
+                            <div class="bottle-body"></div>
+                            <div class="bottle-neck"></div>
+                            <div class="bottle-cap"></div>
+                            <div class="bottle-water"></div>
+                            <div class="bottle-logo">
+                                <img src="https://github.com/IchigoSolos69/EcoSip/blob/e307b84636a79fdfb8c3d61d3ecca27ec50bf7ba/public/logo.png?raw=true" alt="EcoSip Logo">
+                            </div>
+                        </div>
+                        <div class="bottle-glow"></div>
+                    </div>
                 </div>
                 <div class="floating-particles">
                     <div class="particle particle-1"></div>
@@ -448,107 +449,38 @@
     <section id="contact" class="contact">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">Get In <span class="gradient-text">Touch</span></h2>
+                <h2 class="section-title">Get in <span class="gradient-text">Touch</span></h2>
                 <div class="title-underline"></div>
             </div>
             
             <div class="contact-content">
                 <div class="contact-info">
-                    <div class="contact-intro">
-                        <h3 class="contact-subtitle">Ready to Join the EcoSip Revolution?</h3>
-                        <p class="contact-description">
-                            Have questions about our products? Want to learn more about our sustainability mission? 
-                            We'd love to hear from you! Reach out through any of the channels below.
-                        </p>
-                    </div>
-
-                    <div class="contact-methods">
-                        <div class="contact-method">
-                            <div class="method-icon">
-                                <div class="icon-email"></div>
-                            </div>
-                            <div class="method-info">
-                                <h4 class="method-title">Email Us</h4>
-                                <p class="method-description">Get in touch for support, partnerships, or general inquiries</p>
-                                <a href="mailto:hello@ecosip.com" class="contact-link">hello@ecosip.com</a>
+                    <h3>Ready to Join the EcoSip Revolution?</h3>
+                    <p>Connect with us to learn more about sustainable hydration and how you can make a difference.</p>
+                    
+                    <div class="contact-details">
+                        <div class="contact-item">
+                            <div class="contact-icon">📧</div>
+                            <div class="contact-text">
+                                <h4>Email</h4>
+                                <p>hello@ecosip.com</p>
                             </div>
                         </div>
-
-                        <div class="contact-method">
-                            <div class="method-icon">
-                                <div class="icon-facebook"></div>
-                            </div>
-                            <div class="method-info">
-                                <h4 class="method-title">Follow on Facebook</h4>
-                                <p class="method-description">Join our community and stay updated with the latest news</p>
-                                <a href="https://facebook.com/ecosip" target="_blank" class="contact-link">@EcoSip</a>
+                        <div class="contact-item">
+                            <div class="contact-icon">📱</div>
+                            <div class="contact-text">
+                                <h4>Phone</h4>
+                                <p>+1 (555) 123-4567</p>
                             </div>
                         </div>
-
-                        <div class="contact-method">
-                            <div class="method-icon">
-                                <div class="icon-instagram"></div>
-                            </div>
-                            <div class="method-info">
-                                <h4 class="method-title">Follow on Instagram</h4>
-                                <p class="method-description">See our products in action and eco-friendly lifestyle tips</p>
-                                <a href="https://instagram.com/ecosip" target="_blank" class="contact-link">@EcoSip</a>
+                        <div class="contact-item">
+                            <div class="contact-icon">📍</div>
+                            <div class="contact-text">
+                                <h4>Address</h4>
+                                <p>123 Eco Street, Green City, GC 12345</p>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="contact-form-container">
-                    <form class="contact-form">
-                        <h3 class="form-title">Send us a Message</h3>
-                        
-                        <div class="form-group">
-                            <input type="text" id="name" name="name" required class="form-input">
-                            <label for="name" class="form-label">Your Name</label>
-                        </div>
-
-                        <div class="form-group">
-                            <input type="email" id="email" name="email" required class="form-input">
-                            <label for="email" class="form-label">Email Address</label>
-                        </div>
-
-                        <div class="form-group">
-                            <select id="subject" name="subject" required class="form-input">
-                                <option value="">Select a topic</option>
-                                <option value="product">Product Inquiry</option>
-                                <option value="support">Customer Support</option>
-                                <option value="partnership">Partnership</option>
-                                <option value="sustainability">Sustainability Questions</option>
-                                <option value="other">Other</option>
-                            </select>
-                            <label for="subject" class="form-label">Subject</label>
-                        </div>
-
-                        <div class="form-group">
-                            <textarea id="message" name="message" required class="form-input" rows="5"></textarea>
-                            <label for="message" class="form-label">Your Message</label>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary form-submit">
-                            Send Message
-                            <span class="btn-arrow">→</span>
-                        </button>
-                    </form>
-                </div>
-            </div>
-
-            <div class="social-links">
-                <h4 class="social-title">Connect With Us</h4>
-                <div class="social-icons">
-                    <a href="mailto:hello@ecosip.com" class="social-icon email" title="Email">
-                        <span class="icon-email-simple"></span>
-                    </a>
-                    <a href="https://facebook.com/ecosip" target="_blank" class="social-icon facebook" title="Facebook">
-                        <span class="icon-facebook-simple"></span>
-                    </a>
-                    <a href="https://instagram.com/ecosip" target="_blank" class="social-icon instagram" title="Instagram">
-                        <span class="icon-instagram-simple"></span>
-                    </a>
                 </div>
             </div>
         </div>
@@ -559,19 +491,10 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-logo">
-                    <div class="logo-icon">
-                        <svg viewBox="0 0 100 100" width="30" height="30">
-                            <circle cx="50" cy="50" r="45" fill="none" stroke="url(#footerLogoGradient)" stroke-width="3"/>
-                            <text x="50" y="55" text-anchor="middle" font-family="Arial" font-size="12" fill="url(#footerLogoGradient)" font-weight="bold">ES</text>
-                            <defs>
-                                <linearGradient id="footerLogoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" style="stop-color:#00ff88"/>
-                                    <stop offset="100%" style="stop-color:#00d4ff"/>
-                                </linearGradient>
-                            </defs>
-                        </svg>
+                    <div class="footer-logo-container">
+                        <img src="https://github.com/IchigoSolos69/EcoSip/blob/e307b84636a79fdfb8c3d61d3ecca27ec50bf7ba/public/logo.png?raw=true" alt="EcoSip Logo" width="30" height="30" class="footer-logo-img">
+                        <span class="logo-text">EcoSip</span>
                     </div>
-                    <span class="logo-text">EcoSip</span>
                     <p class="footer-tagline">Sustainable hydration for a better tomorrow</p>
                 </div>
                 <div class="footer-links">
