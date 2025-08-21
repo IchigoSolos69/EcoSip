@@ -47,10 +47,6 @@
                 <p class="hero-subtitle">
                     Revolutionary eco-friendly water bottles that don't just hold water—they protect our planet
                 </p>
-                <div class="hero-buttons">
-                    <button class="btn btn-primary">Discover EcoSip</button>
-                    <button class="btn btn-secondary">Learn More</button>
-                </div>
             </div>
             <div class="hero-visual">
                 <div id="stage" class="three-stage" aria-label="EcoSip 3D bottle"></div>
@@ -571,148 +567,153 @@
     const stage = document.getElementById("stage");
     if (stage) {
       const isMobile = window.matchMedia('(max-width: 768px)').matches;
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // Scene
       const scene = new THREE.Scene();
       scene.background = new THREE.Color(0x000000);
 
-      // Camera - closer and better positioned
-      const camera = new THREE.PerspectiveCamera(45, stage.clientWidth / stage.clientHeight, 0.1, 100);
-      camera.position.set(0, 0, 3.5);
+      // Camera
+      const camera = new THREE.PerspectiveCamera(48, stage.clientWidth / stage.clientHeight, 0.1, 100);
+      camera.position.set(0, 0.9, isMobile ? 3.6 : 3.2);
 
-      // Renderer with better settings
+      // Renderer
       const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
       renderer.setSize(stage.clientWidth, stage.clientHeight);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
-      renderer.toneMappingExposure = 1.2;
+      renderer.toneMappingExposure = 1.15;
       renderer.outputEncoding = THREE.sRGBEncoding;
-      renderer.shadowMap.enabled = true;
-      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
       stage.appendChild(renderer.domElement);
 
-      // Controls
+      // Controls (desktop only)
       const controls = new OrbitControls(camera, renderer.domElement);
       controls.enableDamping = true;
       controls.enablePan = false;
-      controls.minDistance = 2.5;
-      controls.maxDistance = 5.0;
-      controls.maxPolarAngle = Math.PI * 0.6;
-      controls.minPolarAngle = Math.PI * 0.2;
-      if (isMobile) {
-        controls.enabled = false;
-      }
+      controls.enabled = !isMobile;
 
-      // Better lighting setup
-      const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
-      scene.add(ambientLight);
+      // Lights
+      scene.add(new THREE.AmbientLight(0x333333));
+      const key = new THREE.DirectionalLight(0xffffff, 1.1);
+      key.position.set(4, 6, 6);
+      scene.add(key);
+      const fill = new THREE.PointLight(0x00d4ff, 1.2, 10); fill.position.set(-2, 1, 2); scene.add(fill);
+      const rim = new THREE.PointLight(0x00ff88, 1.0, 10); rim.position.set(2, -1, -2); scene.add(rim);
 
-      const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
-      directionalLight.position.set(5, 10, 5);
-      directionalLight.castShadow = true;
-      scene.add(directionalLight);
-
-      // Neon accent lights
-      const neonGreen = new THREE.PointLight(0x00ff88, 1.5, 8);
-      neonGreen.position.set(2, 2, 2);
-      scene.add(neonGreen);
-
-      const aquaBlue = new THREE.PointLight(0x00d4ff, 1.5, 8);
-      aquaBlue.position.set(-2, -2, 2);
-      scene.add(aquaBlue);
-
-      // Create a more visible bottle - Nothing style
+      // Bottle Group
       const bottleGroup = new THREE.Group();
-
-      // Main bottle body - more prominent
-      const bottleGeometry = new THREE.CylinderGeometry(0.8, 0.9, 2.5, 32);
-      const bottleMaterial = new THREE.MeshPhysicalMaterial({
-        color: 0x1a1a1a,
-        metalness: 0.8,
-        roughness: 0.2,
-        clearcoat: 1.0,
-        clearcoatRoughness: 0.1,
-        envMapIntensity: 1.0
-      });
-      const bottle = new THREE.Mesh(bottleGeometry, bottleMaterial);
-      bottle.castShadow = true;
-      bottle.receiveShadow = true;
-      bottleGroup.add(bottle);
-
-      // Bottle neck
-      const neckGeometry = new THREE.CylinderGeometry(0.3, 0.8, 0.6, 32);
-      const neck = new THREE.Mesh(neckGeometry, bottleMaterial);
-      neck.position.y = 1.55;
-      neck.castShadow = true;
-      bottleGroup.add(neck);
-
-      // Cap - more prominent
-      const capGeometry = new THREE.CylinderGeometry(0.32, 0.32, 0.5, 32);
-      const capMaterial = new THREE.MeshPhysicalMaterial({
-        color: 0x00ff88,
-        metalness: 0.9,
-        roughness: 0.1,
-        clearcoat: 1.0,
-        clearcoatRoughness: 0.05
-      });
-      const cap = new THREE.Mesh(capGeometry, capMaterial);
-      cap.position.y = 2.05;
-      cap.castShadow = true;
-      bottleGroup.add(cap);
-
-      // Add water inside
-      const waterGeometry = new THREE.CylinderGeometry(0.75, 0.85, 2.2, 32);
-      const waterMaterial = new THREE.MeshPhysicalMaterial({
-        color: 0x00d4ff,
-        transparent: true,
-        opacity: 0.3,
-        transmission: 0.8,
-        thickness: 0.2,
-        roughness: 0.0,
-        metalness: 0.0
-      });
-      const water = new THREE.Mesh(waterGeometry, waterMaterial);
-      water.position.y = 0.15;
-      bottleGroup.add(water);
-
-      // Add EcoSip logo as a glowing element
-      const logoGeometry = new THREE.RingGeometry(0.4, 0.5, 32);
-      const logoMaterial = new THREE.MeshBasicMaterial({
-        color: 0x00ff88,
-        transparent: true,
-        opacity: 0.8,
-        emissive: 0x00ff88,
-        emissiveIntensity: 0.3
-      });
-      const logo = new THREE.Mesh(logoGeometry, logoMaterial);
-      logo.position.set(0, 0.5, 0.85);
-      logo.rotation.x = Math.PI / 2;
-      bottleGroup.add(logo);
-
-      // Add neon wireframe overlay
-      const wireGeometry = new THREE.WireframeGeometry(bottleGeometry);
-      const wireMaterial = new THREE.MeshBasicMaterial({
-        color: 0x00ff88,
-        transparent: true,
-        opacity: 0.15
-      });
-      const wireframe = new THREE.Mesh(wireGeometry, wireMaterial);
-      bottleGroup.add(wireframe);
-
       scene.add(bottleGroup);
 
-      // Animation
-      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      // Lathe profile for sleek bottle
+      const profile = [
+        new THREE.Vector2(0.00, -1.4),
+        new THREE.Vector2(0.55, -1.4),
+        new THREE.Vector2(0.62, -0.6),
+        new THREE.Vector2(0.66,  0.2),
+        new THREE.Vector2(0.58,  0.8),
+        new THREE.Vector2(0.45,  1.2),
+        new THREE.Vector2(0.34,  1.5), // neck base
+        new THREE.Vector2(0.28,  1.8)  // neck
+      ];
+      const latheSeg = isMobile ? 40 : 80;
+      const bodyGeo = new THREE.LatheGeometry(profile, latheSeg);
+
+      // Glass body
+      const glassMat = new THREE.MeshPhysicalMaterial({
+        color: 0xffffff,
+        metalness: 0.0,
+        roughness: 0.05,
+        transparent: true,
+        opacity: 0.5,
+        transmission: 0.96,
+        ior: 1.5,
+        thickness: 0.35,
+        attenuationColor: new THREE.Color(0x00d4ff),
+        attenuationDistance: 3.0,
+        clearcoat: 1.0,
+        clearcoatRoughness: 0.06
+      });
+      const body = new THREE.Mesh(bodyGeo, glassMat);
+      bottleGroup.add(body);
+
+      // Neck ring
+      const ringGeo = new THREE.TorusGeometry(0.29, 0.03, 16, 64);
+      const ringMat = new THREE.MeshStandardMaterial({ color: 0x00ff88, metalness: 0.9, roughness: 0.2 });
+      const neckRing = new THREE.Mesh(ringGeo, ringMat);
+      neckRing.position.y = 1.55;
+      neckRing.rotation.x = Math.PI / 2;
+      bottleGroup.add(neckRing);
+
+      // Cap with hinge
+      const hinge = new THREE.Group();
+      hinge.position.set(0, 1.8, 0.3);
+      bottleGroup.add(hinge);
+
+      const capGeo = new THREE.CylinderGeometry(0.33, 0.33, 0.35, 48);
+      const capMat = new THREE.MeshStandardMaterial({ color: 0x00ff88, metalness: 0.9, roughness: 0.2 });
+      const cap = new THREE.Mesh(capGeo, capMat);
+      cap.position.set(0, 0, -0.3);
+      hinge.add(cap);
+
+      // Water inside
+      const waterGeo = new THREE.CylinderGeometry(0.6, 0.68, 2.2, 48);
+      const waterMat = new THREE.MeshPhysicalMaterial({
+        color: 0x00d4ff,
+        transparent: true,
+        opacity: 0.35,
+        transmission: 1.0,
+        ior: 1.33,
+        thickness: 0.25,
+        roughness: 0.02
+      });
+      const water = new THREE.Mesh(waterGeo, waterMat);
+      water.position.y = -0.05;
+      bottleGroup.add(water);
+
+      // Logo sprite (front)
+      const logoUrl = 'https://github.com/IchigoSolos69/EcoSip/blob/75bd8550becff437428136e981733d35cf7670d9/public/logo.png?raw=true';
+      new THREE.TextureLoader().load(logoUrl, (tex) => {
+        const s = isMobile ? 0.55 : 0.7;
+        const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true, opacity: 0.95 }));
+        sprite.scale.set(s, s, 1);
+        sprite.position.set(0, 0.4, 0.7);
+        bottleGroup.add(sprite);
+      });
+
+      // Scroll-driven cap opening and text reveal
+      const heroEl = document.querySelector('.hero-content');
+      const items = heroEl ? heroEl.querySelectorAll('.hero-title, .hero-subtitle, .hero-buttons') : [];
+      items.forEach((el, i) => { el.style.opacity = '0.6'; el.style.transform = 'translateY(10px)'; });
+
+      const updateScroll = () => {
+        const rect = stage.getBoundingClientRect();
+        const viewportH = window.innerHeight || document.documentElement.clientHeight;
+        const visible = 1 - clamp((rect.top + rect.height * 0.2) / (viewportH * 0.8), 0, 1);
+        // Open cap up to ~65 degrees
+        hinge.rotation.x = -visible * 1.15;
+        // Slight bottle tilt while scrolling
+        bottleGroup.rotation.z = visible * 0.08;
+        // Reveal left text progressively
+        items.forEach((el, idx) => {
+          const p = clamp((visible - idx * 0.12) * 1.4, 0, 1);
+          el.style.opacity = String(0.6 + 0.4 * p);
+          el.style.transform = `translateY(${10 * (1 - p)}px)`;
+        });
+      };
+
+      const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
+      window.addEventListener('scroll', updateScroll, { passive: true });
+
+      // Idle animation
       if (!prefersReduced) {
-        gsap.to(bottleGroup.rotation, { y: Math.PI * 2, duration: 20, repeat: -1, ease: 'none' });
-        gsap.to(bottleGroup.position, { y: '+=0.15', duration: 4, yoyo: true, repeat: -1, ease: 'sine.inOut' });
+        gsap.to(bottleGroup.rotation, { y: '+=' + Math.PI * 2, duration: 22, repeat: -1, ease: 'none' });
+        gsap.to(bottleGroup.position, { y: '+=0.12', duration: 3.4, yoyo: true, repeat: -1, ease: 'sine.inOut' });
       }
 
-      // Resize handling
+      // Resize
       const resize = () => {
-        const w = stage.clientWidth;
-        const h = stage.clientHeight;
-        camera.aspect = w / h;
-        camera.updateProjectionMatrix();
-        renderer.setSize(w, h);
+        const w = stage.clientWidth, h = stage.clientHeight;
+        camera.aspect = w / h; camera.updateProjectionMatrix(); renderer.setSize(w, h);
       };
       new ResizeObserver(resize).observe(stage);
       window.addEventListener('orientationchange', () => setTimeout(resize, 150));
@@ -720,6 +721,7 @@
       // Render loop
       renderer.setAnimationLoop(() => {
         controls.update();
+        updateScroll();
         renderer.render(scene, camera);
       });
     }
