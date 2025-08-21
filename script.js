@@ -508,14 +508,17 @@ class EcoSipBottle3D {
         this.renderer = null;
         this.bottle = null;
         this.cap = null;
+        this.capHinge = null;
         this.bottleGroup = null;
         this.container = document.getElementById('bottle-3d-container');
         this.canvas = document.getElementById('bottle-canvas');
         this.clock = new THREE.Clock();
+        this.capOpenProgress = 0;
         
         if (this.container && this.canvas) {
             this.init();
             this.createBottle();
+            this.createLogo();
             this.setupLighting();
             this.setupEventListeners();
             this.animate();
@@ -548,64 +551,30 @@ class EcoSipBottle3D {
         this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-        this.renderer.toneMappingExposure = 1.2;
+        this.renderer.toneMappingExposure = 1.0;
+        this.renderer.outputEncoding = THREE.sRGBEncoding;
         
         // Create bottle group for easier manipulation
         this.bottleGroup = new THREE.Group();
         this.scene.add(this.bottleGroup);
         
         // Add subtle fog for depth
-        this.scene.fog = new THREE.Fog(0x000000, 15, 30);
+        this.scene.fog = new THREE.Fog(0x000000, 20, 40);
     }
     
     createBottle() {
-        // Create a more realistic bottle shape using custom geometry
-        const bottleShape = new THREE.Shape();
+        // Create a sleek, modern bottle shape
+        const bottleGeometry = new THREE.CylinderGeometry(0.8, 0.9, 3.2, 32, 1, true);
         
-        // Bottle profile - sleek, modern design
-        bottleShape.moveTo(0, -2);
-        bottleShape.lineTo(0.3, -2);
-        bottleShape.lineTo(0.4, -1.8);
-        bottleShape.lineTo(0.5, -1.5);
-        bottleShape.lineTo(0.6, -1);
-        bottleShape.lineTo(0.7, -0.5);
-        bottleShape.lineTo(0.8, 0);
-        bottleShape.lineTo(0.85, 0.5);
-        bottleShape.lineTo(0.9, 1);
-        bottleShape.lineTo(0.9, 1.5);
-        bottleShape.lineTo(0.85, 2);
-        bottleShape.lineTo(0.8, 2.2);
-        bottleShape.lineTo(0.7, 2.3);
-        bottleShape.lineTo(0.6, 2.4);
-        bottleShape.lineTo(0.5, 2.5);
-        bottleShape.lineTo(0.4, 2.6);
-        bottleShape.lineTo(0.3, 2.7);
-        bottleShape.lineTo(0.2, 2.8);
-        bottleShape.lineTo(0.1, 2.9);
-        bottleShape.lineTo(0, 3);
-        
-        // Extrude the shape to create 3D bottle
-        const extrudeSettings = {
-            steps: 1,
-            depth: 0.1,
-            bevelEnabled: true,
-            bevelThickness: 0.05,
-            bevelSize: 0.05,
-            bevelOffset: 0,
-            bevelSegments: 8
-        };
-        
-        const bottleGeometry = new THREE.ExtrudeGeometry(bottleShape, extrudeSettings);
-        
-        // Create glass material with proper transparency and refraction
+        // Create glass material with realistic properties
         const bottleMaterial = new THREE.MeshPhysicalMaterial({
-            color: 0xffffff,
+            color: 0x00d4ff,
             metalness: 0.0,
             roughness: 0.0,
             transparent: true,
-            opacity: 0.1,
+            opacity: 0.3,
             transmission: 0.95,
-            thickness: 0.5,
+            thickness: 0.2,
             envMapIntensity: 1.0,
             clearcoat: 1.0,
             clearcoatRoughness: 0.0,
@@ -619,8 +588,42 @@ class EcoSipBottle3D {
         this.bottle.receiveShadow = true;
         this.bottleGroup.add(this.bottle);
         
-        // Create bottle cap with better design
-        const capGeometry = new THREE.CylinderGeometry(0.25, 0.25, 0.4, 32);
+        // Create bottle neck
+        const neckGeometry = new THREE.CylinderGeometry(0.3, 0.8, 0.8, 32);
+        const neckMaterial = new THREE.MeshPhysicalMaterial({
+            color: 0x00d4ff,
+            metalness: 0.0,
+            roughness: 0.0,
+            transparent: true,
+            opacity: 0.3,
+            transmission: 0.95,
+            thickness: 0.2,
+            clearcoat: 1.0,
+            clearcoatRoughness: 0.0
+        });
+        
+        const neck = new THREE.Mesh(neckGeometry, neckMaterial);
+        neck.position.y = 2.0;
+        neck.castShadow = true;
+        this.bottleGroup.add(neck);
+        
+        // Create bottle cap with realistic design
+        this.createCap();
+        
+        // Add water inside bottle
+        this.createWater();
+        
+        // Add smart technology elements
+        this.createSmartElements();
+        
+        // Position bottle group
+        this.bottleGroup.position.y = -0.5;
+        this.bottleGroup.rotation.y = Math.PI * 0.2;
+    }
+    
+    createCap() {
+        // Cap body
+        const capGeometry = new THREE.CylinderGeometry(0.32, 0.32, 0.6, 32);
         const capMaterial = new THREE.MeshPhysicalMaterial({
             color: 0x00ff88,
             metalness: 0.8,
@@ -630,24 +633,39 @@ class EcoSipBottle3D {
         });
         
         this.cap = new THREE.Mesh(capGeometry, capMaterial);
-        this.cap.position.y = 3.2;
+        this.cap.position.y = 2.4;
         this.cap.castShadow = true;
         this.bottleGroup.add(this.cap);
         
-        // Add water inside bottle
-        this.createWater();
+        // Cap top with grip texture
+        const capTopGeometry = new THREE.CylinderGeometry(0.32, 0.32, 0.1, 32);
+        const capTopMaterial = new THREE.MeshPhysicalMaterial({
+            color: 0x00ff88,
+            metalness: 0.9,
+            roughness: 0.1,
+            clearcoat: 1.0,
+            clearcoatRoughness: 0.05
+        });
         
-        // Add EcoSip branding
-        this.createBranding();
+        const capTop = new THREE.Mesh(capTopGeometry, capTopMaterial);
+        capTop.position.y = 2.65;
+        this.bottleGroup.add(capTop);
         
-        // Position bottle group
-        this.bottleGroup.position.y = -0.5;
-        this.bottleGroup.rotation.y = Math.PI * 0.2;
+        // Create hinge for cap opening animation
+        this.capHinge = new THREE.Group();
+        this.capHinge.position.set(0, 2.4, 0.32);
+        this.capHinge.add(this.cap);
+        this.capHinge.add(capTop);
+        this.bottleGroup.add(this.capHinge);
+        
+        // Reset cap position
+        this.cap.position.y = 0;
+        capTop.position.y = 0.25;
     }
     
     createWater() {
-        // Create water geometry that fits inside the bottle
-        const waterGeometry = new THREE.CylinderGeometry(0.6, 0.7, 2.5, 32);
+        // Water inside bottle
+        const waterGeometry = new THREE.CylinderGeometry(0.75, 0.85, 2.8, 32);
         const waterMaterial = new THREE.MeshPhysicalMaterial({
             color: 0x00d4ff,
             transparent: true,
@@ -663,8 +681,8 @@ class EcoSipBottle3D {
         water.position.y = 0.2;
         this.bottleGroup.add(water);
         
-        // Add water surface with ripples
-        const surfaceGeometry = new THREE.CylinderGeometry(0.6, 0.6, 0.02, 32);
+        // Water surface with subtle ripples
+        const surfaceGeometry = new THREE.CylinderGeometry(0.75, 0.75, 0.02, 32);
         const surfaceMaterial = new THREE.MeshPhysicalMaterial({
             color: 0x00d4ff,
             transparent: true,
@@ -674,40 +692,92 @@ class EcoSipBottle3D {
         });
         
         const waterSurface = new THREE.Mesh(surfaceGeometry, surfaceMaterial);
-        waterSurface.position.y = 1.45;
+        waterSurface.position.y = 1.6;
         this.bottleGroup.add(waterSurface);
     }
     
-    createBranding() {
-        // Create a sleek label
-        const labelGeometry = new THREE.PlaneGeometry(1.2, 0.8);
-        const labelMaterial = new THREE.MeshBasicMaterial({
+    createSmartElements() {
+        // Smart temperature sensor (subtle ring)
+        const sensorGeometry = new THREE.RingGeometry(0.85, 0.9, 32);
+        const sensorMaterial = new THREE.MeshBasicMaterial({
+            color: 0x00ff88,
+            transparent: true,
+            opacity: 0.8
+        });
+        
+        const sensor = new THREE.Mesh(sensorGeometry, sensorMaterial);
+        sensor.position.y = -1.2;
+        sensor.rotation.x = Math.PI / 2;
+        this.bottleGroup.add(sensor);
+        
+        // LED indicator
+        const ledGeometry = new THREE.SphereGeometry(0.05, 16, 16);
+        const ledMaterial = new THREE.MeshBasicMaterial({
+            color: 0x00ff88,
+            emissive: 0x00ff88,
+            emissiveIntensity: 0.5
+        });
+        
+        const led = new THREE.Mesh(ledGeometry, ledMaterial);
+        led.position.set(0.7, 0.5, 0.85);
+        this.bottleGroup.add(led);
+    }
+    
+    createLogo() {
+        // Create EcoSip logo as embossed geometry
+        const logoGroup = new THREE.Group();
+        
+        // Main logo circle
+        const circleGeometry = new THREE.RingGeometry(0.4, 0.5, 32);
+        const circleMaterial = new THREE.MeshBasicMaterial({
             color: 0x00ff88,
             transparent: true,
             opacity: 0.9
         });
         
-        const label = new THREE.Mesh(labelGeometry, labelMaterial);
-        label.position.set(0, 0.5, 0.6);
-        label.rotation.y = Math.PI * 0.1;
-        this.bottleGroup.add(label);
+        const logoCircle = new THREE.Mesh(circleGeometry, circleMaterial);
+        logoCircle.position.set(0, 0.5, 0.85);
+        logoCircle.rotation.x = Math.PI / 2;
+        logoGroup.add(logoCircle);
         
-        // Add EcoSip text (simplified geometric representation)
-        const textGeometry = new THREE.BoxGeometry(0.8, 0.1, 0.02);
-        const textMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
-        const textMesh = new THREE.Mesh(textGeometry, textMaterial);
-        textMesh.position.set(0, 0.5, 0.61);
-        textMesh.rotation.y = Math.PI * 0.1;
-        this.bottleGroup.add(textMesh);
+        // Logo text "ES" using geometry
+        const textGeometry = new THREE.BoxGeometry(0.3, 0.1, 0.02);
+        const textMaterial = new THREE.MeshBasicMaterial({ 
+            color: 0x00ff88,
+            emissive: 0x00ff88,
+            emissiveIntensity: 0.3
+        });
+        
+        const logoText = new THREE.Mesh(textGeometry, textMaterial);
+        logoText.position.set(0, 0.5, 0.86);
+        logoGroup.add(logoText);
+        
+        // Add glow effect
+        const glowGeometry = new THREE.RingGeometry(0.45, 0.55, 32);
+        const glowMaterial = new THREE.MeshBasicMaterial({
+            color: 0x00ff88,
+            transparent: true,
+            opacity: 0.3,
+            emissive: 0x00ff88,
+            emissiveIntensity: 0.2
+        });
+        
+        const logoGlow = new THREE.Mesh(glowGeometry, glowMaterial);
+        logoGlow.position.set(0, 0.5, 0.84);
+        logoGlow.rotation.x = Math.PI / 2;
+        logoGroup.add(logoGlow);
+        
+        this.bottleGroup.add(logoGroup);
+        this.logoGroup = logoGroup;
     }
     
     setupLighting() {
         // Ambient light for overall illumination
-        const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
+        const ambientLight = new THREE.AmbientLight(0x404040, 0.3);
         this.scene.add(ambientLight);
         
         // Main directional light
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 1.2);
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
         directionalLight.position.set(5, 10, 5);
         directionalLight.castShadow = true;
         directionalLight.shadow.mapSize.width = 2048;
@@ -721,22 +791,30 @@ class EcoSipBottle3D {
         this.scene.add(directionalLight);
         
         // Neon accent lights
-        const neonLight1 = new THREE.PointLight(0x00ff88, 1.0, 15);
+        const neonLight1 = new THREE.PointLight(0x00ff88, 1.2, 15);
         neonLight1.position.set(-4, 3, 4);
         this.scene.add(neonLight1);
         
-        const neonLight2 = new THREE.PointLight(0x00d4ff, 1.0, 15);
+        const neonLight2 = new THREE.PointLight(0x00d4ff, 1.2, 15);
         neonLight2.position.set(4, -2, 4);
         this.scene.add(neonLight2);
         
         // Rim light for bottle edge highlighting
-        const rimLight = new THREE.PointLight(0xffffff, 0.8, 12);
+        const rimLight = new THREE.PointLight(0xffffff, 1.0, 12);
         rimLight.position.set(0, 0, 6);
         this.scene.add(rimLight);
+        
+        // Logo spotlight
+        const logoLight = new THREE.SpotLight(0x00ff88, 0.8, 10, Math.PI / 6, 0.5);
+        logoLight.position.set(0, 2, 4);
+        logoLight.target.position.set(0, 0.5, 0.85);
+        this.scene.add(logoLight);
+        this.scene.add(logoLight.target);
         
         // Animate the lights
         this.neonLight1 = neonLight1;
         this.neonLight2 = neonLight2;
+        this.logoLight = logoLight;
     }
     
     setupEventListeners() {
@@ -755,19 +833,19 @@ class EcoSipBottle3D {
             targetRotationY = Math.PI * 0.2 + mouseX * 0.8;
         });
         
-        // Scroll-based animations
+        // Scroll-based cap animation
         window.addEventListener('scroll', () => {
             const scrollProgress = Math.min(window.scrollY / (window.innerHeight * 0.5), 1);
+            this.capOpenProgress = scrollProgress;
             
-            if (this.cap) {
-                // Cap opens smoothly as user scrolls
-                this.cap.position.y = 3.2 + (scrollProgress * 0.6);
-                this.cap.rotation.z = scrollProgress * Math.PI * 0.2;
+            // Cap opens smoothly as user scrolls
+            if (this.capHinge) {
+                this.capHinge.rotation.x = -scrollProgress * Math.PI * 0.4;
             }
             
             // Bottle tilts slightly
             if (this.bottleGroup) {
-                this.bottleGroup.rotation.z = scrollProgress * 0.2;
+                this.bottleGroup.rotation.z = scrollProgress * 0.1;
             }
         });
         
@@ -806,13 +884,22 @@ class EcoSipBottle3D {
         
         // Animate neon lights
         if (this.neonLight1 && this.neonLight2) {
-            this.neonLight1.intensity = 1.0 + Math.sin(time * 3) * 0.3;
-            this.neonLight2.intensity = 1.0 + Math.sin(time * 3 + Math.PI) * 0.3;
+            this.neonLight1.intensity = 1.2 + Math.sin(time * 3) * 0.4;
+            this.neonLight2.intensity = 1.2 + Math.sin(time * 3 + Math.PI) * 0.4;
+        }
+        
+        // Animate logo glow
+        if (this.logoGroup) {
+            this.logoGroup.children.forEach((child, index) => {
+                if (child.material.emissive) {
+                    child.material.emissiveIntensity = 0.3 + Math.sin(time * 2 + index) * 0.2;
+                }
+            });
         }
         
         // Subtle camera movement
-        this.camera.position.x = Math.sin(time * 0.5) * 0.5;
-        this.camera.position.z = 8 + Math.sin(time * 0.3) * 0.3;
+        this.camera.position.x = Math.sin(time * 0.5) * 0.3;
+        this.camera.position.z = 8 + Math.sin(time * 0.3) * 0.2;
         this.camera.lookAt(0, 0, 0);
         
         // Render scene
@@ -820,61 +907,12 @@ class EcoSipBottle3D {
     }
 }
 
-// Mobile Menu Functionality
-document.addEventListener('DOMContentLoaded', () => {
-    const mobileToggle = document.querySelector('.mobile-menu-toggle');
-    const navMenu = document.querySelector('.nav-menu');
-    const navLinks = document.querySelectorAll('.nav-link');
-    
-    if (mobileToggle && navMenu) {
-        mobileToggle.addEventListener('click', () => {
-            mobileToggle.classList.toggle('active');
-            navMenu.classList.toggle('active');
-            
-            // Prevent body scroll when menu is open
-            if (navMenu.classList.contains('active')) {
-                document.body.style.overflow = 'hidden';
-            } else {
-                document.body.style.overflow = '';
-            }
-        });
-        
-        // Close menu when clicking on nav links
-        navLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                mobileToggle.classList.remove('active');
-                navMenu.classList.remove('active');
-                document.body.style.overflow = '';
-            });
-        });
-        
-        // Close menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!mobileToggle.contains(e.target) && !navMenu.contains(e.target)) {
-                mobileToggle.classList.remove('active');
-                navMenu.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-        });
-    }
-});
-
-// Mobile-optimized 3D bottle initialization
+// Initialize 3D bottle when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     // Wait for Three.js to load
     setTimeout(() => {
         if (typeof THREE !== 'undefined') {
-            // Check if device is mobile for performance optimization
-            const isMobile = window.innerWidth <= 768;
-            
-            if (isMobile) {
-                // Reduce 3D bottle complexity on mobile
-                const bottle3D = new EcoSipBottle3D();
-                // Reduce animation frequency on mobile
-                bottle3D.reducedPerformance = true;
-            } else {
-                new EcoSipBottle3D();
-            }
+            new EcoSipBottle3D();
         } else {
             console.warn('Three.js not loaded, falling back to 2D bottle');
             // Fallback to 2D bottle if Three.js fails to load
