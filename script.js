@@ -1,3 +1,23 @@
+// Mobile menu toggle
+document.addEventListener('DOMContentLoaded', () => {
+    const toggle = document.querySelector('.mobile-menu-toggle');
+    const navMenu = document.querySelector('.nav-menu');
+    if (toggle && navMenu) {
+        toggle.addEventListener('click', () => {
+            toggle.classList.toggle('active');
+            navMenu.classList.toggle('active');
+            document.body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : '';
+        });
+
+        // Close on link click
+        navMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+            toggle.classList.remove('active');
+            navMenu.classList.remove('active');
+            document.body.style.overflow = '';
+        }));
+    }
+});
+
 // Smooth scrolling for navigation links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
@@ -16,8 +36,6 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 window.addEventListener('scroll', () => {
     const navbar = document.querySelector('.navbar');
     const scrolled = window.pageYOffset;
-    const rate = scrolled * -0.5;
-    
     if (scrolled > 100) {
         navbar.style.background = 'rgba(0, 0, 0, 0.98)';
         navbar.style.backdropFilter = 'blur(20px)';
@@ -28,11 +46,7 @@ window.addEventListener('scroll', () => {
 });
 
 // Intersection Observer for animations
-const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-};
-
+const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -42,10 +56,8 @@ const observer = new IntersectionObserver((entries) => {
     });
 }, observerOptions);
 
-// Observe elements for scroll animations
 document.addEventListener('DOMContentLoaded', () => {
     const animateElements = document.querySelectorAll('.mission-card, .stat-item, .about-intro, .product-card, .testimonial-card, .highlight-item, .gallery-item');
-    
     animateElements.forEach(el => {
         el.style.opacity = '0';
         el.style.transform = 'translateY(30px)';
@@ -54,11 +66,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// Counter animation for stats
+// Counter animation helpers
 function animateCounter(element, target, duration = 2000) {
     let start = 0;
     const increment = target / (duration / 16);
-    
     const timer = setInterval(() => {
         start += increment;
         if (start >= target) {
@@ -70,30 +81,26 @@ function animateCounter(element, target, duration = 2000) {
     }, 16);
 }
 
-// Rating animation for decimal ratings (like 4.9/5)
-function animateRating(element, target, maxRating, duration = 2000) {
+function animateRating(element, rating, max, duration = 1800) {
     let start = 0;
-    const increment = target / (duration / 16);
-    
+    const increment = rating / (duration / 16);
     const timer = setInterval(() => {
         start += increment;
-        if (start >= target) {
-            element.textContent = target.toFixed(1) + '/' + maxRating;
+        if (start >= rating) {
+            element.textContent = start.toFixed(1) + '/' + max;
             clearInterval(timer);
         } else {
-            element.textContent = start.toFixed(1) + '/' + maxRating;
+            element.textContent = start.toFixed(1) + '/' + max;
         }
     }, 16);
 }
 
-// Trigger counter animations when stats section is visible
 const statsObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
             const statNumbers = entry.target.querySelectorAll('.stat-number');
             statNumbers.forEach(stat => {
                 const text = stat.textContent;
-                
                 // Handle special case for rating format (4.9/5)
                 if (text.includes('/')) {
                     const parts = text.split('/');
@@ -105,8 +112,6 @@ const statsObserver = new IntersectionObserver((entries) => {
                         return;
                     }
                 }
-                
-                // Handle regular numbers
                 const number = parseInt(text.replace(/[^0-9]/g, ''));
                 const suffix = text.replace(/[0-9,]/g, '');
                 stat.dataset.suffix = suffix;
@@ -120,130 +125,11 @@ const statsObserver = new IntersectionObserver((entries) => {
 document.addEventListener('DOMContentLoaded', () => {
     const statsSection = document.querySelector('.stats-section');
     const testimonialsStats = document.querySelector('.testimonials-stats');
-    
-    if (statsSection) {
-        statsObserver.observe(statsSection);
-    }
-    
-    if (testimonialsStats) {
-        statsObserver.observe(testimonialsStats);
-    }
+    if (statsSection) statsObserver.observe(statsSection);
+    if (testimonialsStats) statsObserver.observe(testimonialsStats);
 });
 
-// Gallery Slider Functionality
-class GallerySlider {
-    constructor() {
-        this.currentSlide = 0;
-        this.slides = document.querySelectorAll('.slide');
-        this.dots = document.querySelectorAll('.dot');
-        this.prevBtn = document.querySelector('.prev-btn');
-        this.nextBtn = document.querySelector('.next-btn');
-        this.totalSlides = this.slides.length;
-        
-        this.init();
-    }
-    
-    init() {
-        if (this.prevBtn) this.prevBtn.addEventListener('click', () => this.prevSlide());
-        if (this.nextBtn) this.nextBtn.addEventListener('click', () => this.nextSlide());
-        
-        this.dots.forEach((dot, index) => {
-            dot.addEventListener('click', () => this.goToSlide(index));
-        });
-        
-        // Auto-play slider
-        this.startAutoPlay();
-        
-        // Pause auto-play on hover
-        const slider = document.querySelector('.gallery-slider');
-        if (slider) {
-            slider.addEventListener('mouseenter', () => this.stopAutoPlay());
-            slider.addEventListener('mouseleave', () => this.startAutoPlay());
-        }
-    }
-    
-    goToSlide(index) {
-        // Remove active class from current slide and dot
-        this.slides[this.currentSlide].classList.remove('active');
-        this.dots[this.currentSlide].classList.remove('active');
-        
-        // Update current slide
-        this.currentSlide = index;
-        
-        // Add active class to new slide and dot
-        this.slides[this.currentSlide].classList.add('active');
-        this.dots[this.currentSlide].classList.add('active');
-    }
-    
-    nextSlide() {
-        const next = (this.currentSlide + 1) % this.totalSlides;
-        this.goToSlide(next);
-    }
-    
-    prevSlide() {
-        const prev = (this.currentSlide - 1 + this.totalSlides) % this.totalSlides;
-        this.goToSlide(prev);
-    }
-    
-    startAutoPlay() {
-        this.autoPlayInterval = setInterval(() => {
-            this.nextSlide();
-        }, 5000);
-    }
-    
-    stopAutoPlay() {
-        if (this.autoPlayInterval) {
-            clearInterval(this.autoPlayInterval);
-        }
-    }
-}
-
-// Initialize gallery slider
-document.addEventListener('DOMContentLoaded', () => {
-    if (document.querySelector('.gallery-slider')) {
-        new GallerySlider();
-    }
-});
-
-// Product card interactions
-document.addEventListener('DOMContentLoaded', () => {
-    const productCards = document.querySelectorAll('.product-card');
-    
-    productCards.forEach(card => {
-        const productShape = card.querySelector('.product-shape');
-        
-        card.addEventListener('mouseenter', () => {
-            if (productShape) {
-                productShape.style.transform = 'scale(1.1) rotate(5deg)';
-            }
-        });
-        
-        card.addEventListener('mouseleave', () => {
-            if (productShape) {
-                productShape.style.transform = 'scale(1) rotate(0deg)';
-            }
-        });
-    });
-});
-
-// Testimonial card hover effects
-document.addEventListener('DOMContentLoaded', () => {
-    const testimonialCards = document.querySelectorAll('.testimonial-card');
-    
-    testimonialCards.forEach(card => {
-        card.addEventListener('mouseenter', function() {
-            this.style.background = 'linear-gradient(135deg, rgba(17, 17, 17, 0.9), rgba(0, 255, 136, 0.05))';
-            this.style.transform = 'translateY(-5px) scale(1.02)';
-        });
-        
-        card.addEventListener('mouseleave', function() {
-            this.style.background = '#111111';
-            this.style.transform = 'translateY(0) scale(1)';
-        });
-    });
-});
-
-// Particle system enhancement
+// Particle system - reduced on mobile
 function createFloatingParticle() {
     const particle = document.createElement('div');
     particle.className = 'floating-particle';
@@ -258,45 +144,27 @@ function createFloatingParticle() {
         opacity: 0;
         animation: floatUp 8s linear forwards;
     `;
-    
     particle.style.left = Math.random() * window.innerWidth + 'px';
     particle.style.top = window.innerHeight + 'px';
-    
     document.body.appendChild(particle);
-    
-    setTimeout(() => {
-        particle.remove();
-    }, 8000);
+    setTimeout(() => { particle.remove(); }, 8000);
 }
 
-// Add floating particles periodically
-setInterval(createFloatingParticle, 3000);
+const isMobile = window.matchMedia('(max-width: 768px)').matches;
+if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    setInterval(createFloatingParticle, isMobile ? 6000 : 3000);
+}
 
 // Add CSS for floating particles
 const style = document.createElement('style');
 style.textContent = `
     @keyframes floatUp {
-        0% {
-            opacity: 0;
-            transform: translateY(0) translateX(0) scale(0);
-        }
-        10% {
-            opacity: 1;
-            transform: translateY(-100px) translateX(20px) scale(1);
-        }
-        90% {
-            opacity: 1;
-            transform: translateY(-90vh) translateX(-20px) scale(1);
-        }
-        100% {
-            opacity: 0;
-            transform: translateY(-100vh) translateX(0) scale(0);
-        }
+        0% { opacity: 0; transform: translateY(0) translateX(0) scale(0); }
+        10% { opacity: 1; transform: translateY(-100px) translateX(20px) scale(1); }
+        90% { opacity: 1; transform: translateY(-90vh) translateX(-20px) scale(1); }
+        100% { opacity: 0; transform: translateY(-100vh) translateX(0) scale(0); }
     }
-    
-    .floating-particle {
-        box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
-    }
+    .floating-particle { box-shadow: 0 0 10px rgba(0, 255, 136, 0.5); }
 `;
 document.head.appendChild(style);
 

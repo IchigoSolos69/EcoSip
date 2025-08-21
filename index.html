@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EcoSip - Sustainable Hydration Revolution</title>
-    <link rel="icon" type="image/png" href="https://github.com/IchigoSolos69/EcoSip/blob/e307b84636a79fdfb8c3d61d3ecca27ec50bf7ba/public/logo.png?raw=true">
+    <link rel="icon" type="image/png" href="https://github.com/IchigoSolos69/EcoSip/blob/75bd8550becff437428136e981733d35cf7670d9/public/logo.png?raw=true">
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
@@ -14,7 +14,7 @@
         <div class="nav-container">
             <div class="nav-logo">
                 <div class="logo-icon">
-                    <img src="https://github.com/IchigoSolos69/EcoSip/blob/e307b84636a79fdfb8c3d61d3ecca27ec50bf7ba/public/logo.png?raw=true" alt="EcoSip Logo" width="40" height="40">
+                    <img src="https://github.com/IchigoSolos69/EcoSip/blob/75bd8550becff437428136e981733d35cf7670d9/public/logo.png?raw=true" alt="EcoSip Logo" width="40" height="40">
                 </div>
                 <span class="logo-text">EcoSip</span>
                 <div class="logo-glow"></div>
@@ -53,20 +53,7 @@
                 </div>
             </div>
             <div class="hero-visual">
-                <div class="hero-bottle">
-                    <div class="bottle-container">
-                        <div class="bottle-shape">
-                            <div class="bottle-body"></div>
-                            <div class="bottle-neck"></div>
-                            <div class="bottle-cap"></div>
-                            <div class="bottle-water"></div>
-                            <div class="bottle-logo">
-                                <img src="https://github.com/IchigoSolos69/EcoSip/blob/e307b84636a79fdfb8c3d61d3ecca27ec50bf7ba/public/logo.png?raw=true" alt="EcoSip Logo">
-                            </div>
-                        </div>
-                        <div class="bottle-glow"></div>
-                    </div>
-                </div>
+                <div id="stage" class="three-stage" aria-label="EcoSip 3D bottle"></div>
                 <div class="floating-particles">
                     <div class="particle particle-1"></div>
                     <div class="particle particle-2"></div>
@@ -576,5 +563,136 @@
     </footer>
 
     <script src="script.js"></script>
+    <script type="module">
+    import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js";
+    import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js";
+    import gsap from "https://cdn.jsdelivr.net/npm/gsap@3.12.5/index.js";
+
+    const stage = document.getElementById("stage");
+    if (stage) {
+      const isMobile = window.matchMedia('(max-width: 768px)').matches;
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x000000);
+
+      // Camera
+      const camera = new THREE.PerspectiveCamera(50, stage.clientWidth / stage.clientHeight, 0.1, 100);
+      camera.position.set(0, 1.2, isMobile ? 3.6 : 4.2);
+
+      // Renderer
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setSize(stage.clientWidth, stage.clientHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.0;
+      renderer.outputEncoding = THREE.sRGBEncoding;
+      renderer.physicallyCorrectLights = true;
+      stage.appendChild(renderer.domElement);
+
+      // Controls (limited for mobile)
+      const controls = new OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.enablePan = false;
+      controls.minDistance = 2.4;
+      controls.maxDistance = 5.0;
+      controls.maxPolarAngle = Math.PI * 0.56;
+      controls.minPolarAngle = Math.PI * 0.25;
+      if (isMobile) {
+        controls.enabled = false;
+      }
+
+      // Lights - neon glow feel
+      const neonGreen = new THREE.PointLight(0x39ff14, isMobile ? 1.4 : 2.0, 10);
+      neonGreen.position.set(3, 2, 2);
+      scene.add(neonGreen);
+
+      const aquaBlue = new THREE.PointLight(0x00ffff, isMobile ? 1.4 : 2.0, 10);
+      aquaBlue.position.set(-3, -2, -2);
+      scene.add(aquaBlue);
+
+      scene.add(new THREE.AmbientLight(0x222222));
+
+      // Bottle geometry via Lathe (more elegant silhouette)
+      const points = [];
+      points.push(new THREE.Vector2(0.0, 0.0));       // bottom center
+      points.push(new THREE.Vector2(0.45, 0.0));      // bottom edge
+      points.push(new THREE.Vector2(0.58, 0.6));      // lower belly
+      points.push(new THREE.Vector2(0.62, 1.2));      // belly
+      points.push(new THREE.Vector2(0.56, 1.6));      // taper start
+      points.push(new THREE.Vector2(0.42, 2.0));      // neck base
+      points.push(new THREE.Vector2(0.32, 2.3));      // neck
+      points.push(new THREE.Vector2(0.30, 2.45));     // lip
+
+      const latheSegments = isMobile ? 32 : 96;
+      const bottleGeo = new THREE.LatheGeometry(points, latheSegments);
+
+      // Bottle material - glassy aqua with subtle emissive
+      const bottleMat = new THREE.MeshPhysicalMaterial({
+        color: 0xffffff,
+        metalness: 0.0,
+        roughness: 0.08,
+        transparent: true,
+        opacity: 0.45,
+        transmission: 0.92,
+        ior: 1.5,
+        thickness: 0.25,
+        attenuationColor: new THREE.Color(0x00d4ff),
+        attenuationDistance: 2.0,
+        clearcoat: 1,
+        clearcoatRoughness: 0.05,
+        emissive: 0x00ffff,
+        emissiveIntensity: 0.08
+      });
+
+      const bottle = new THREE.Mesh(bottleGeo, bottleMat);
+      bottle.castShadow = false;
+      bottle.receiveShadow = false;
+      scene.add(bottle);
+
+      // Neon edge overlay (lighter than full wireframe)
+      const edges = new THREE.EdgesGeometry(bottleGeo, 1);
+      const edgeMat = new THREE.LineBasicMaterial({ color: 0x39ff14, transparent: true, opacity: 0.2 });
+      const bottleEdges = new THREE.LineSegments(edges, edgeMat);
+      scene.add(bottleEdges);
+
+      // EcoSip logo sprite on front
+      const logoUrl = 'https://github.com/IchigoSolos69/EcoSip/blob/e307b84636a79fdfb8c3d61d3ecca27ec50bf7ba/public/logo.png?raw=true';
+      const texLoader = new THREE.TextureLoader();
+      texLoader.load(logoUrl, (map) => {
+        const spriteMat = new THREE.SpriteMaterial({ map, transparent: true, opacity: 0.95 });
+        const sprite = new THREE.Sprite(spriteMat);
+        const s = isMobile ? 0.55 : 0.7;
+        sprite.scale.set(s, s, 1);
+        sprite.position.set(0, 0.9, 0.62);
+        scene.add(sprite);
+      });
+
+      // Animation
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!prefersReduced) {
+        gsap.to(bottle.rotation, { y: Math.PI * 2, duration: 18, repeat: -1, ease: 'none' });
+        gsap.to(bottleEdges.rotation, { y: Math.PI * 2, duration: 18, repeat: -1, ease: 'none' });
+        const floatCfg = { y: "+=0.18", duration: 3, yoyo: true, repeat: -1, ease: 'sine.inOut' };
+        gsap.to(bottle.position, floatCfg);
+        gsap.to(bottleEdges.position, floatCfg);
+      }
+
+      // Resize handling
+      const resize = () => {
+        const w = stage.clientWidth;
+        const h = stage.clientHeight;
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+        renderer.setSize(w, h);
+      };
+      new ResizeObserver(resize).observe(stage);
+      window.addEventListener('orientationchange', () => setTimeout(resize, 150));
+
+      // Render loop
+      renderer.setAnimationLoop(() => {
+        controls.update();
+        renderer.render(scene, camera);
+      });
+    }
+    </script>
 </body>
 </html>
