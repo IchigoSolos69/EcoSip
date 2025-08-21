@@ -45,7 +45,9 @@
                     <span class="gradient-text">The World</span> 
                 </h1>
                 <p class="hero-subtitle">
-                    Revolutionary eco-friendly water bottles that don't just hold water—they protect our planet
+                    This isn't just a Bottle. It's a movement.
+                    Be part of the solution, not the problem.
+                    Discover why every sip matters.
                 </p>
             </div>
             <div class="hero-visual">
@@ -381,7 +383,7 @@
                     <div class="about-intro">
                         <h3 class="about-subtitle">Revolutionizing Hydration, One Sip at a Time</h3>
                         <p class="about-description">
-                            EcoSip represents the next generation of sustainable hydration solutions. Born from a passion for environmental conservation and innovative design, we've created water bottles that seamlessly blend cutting-edge technology with eco-conscious materials.
+                            Over half a million people have discovered that EcoSip is more than just hydration—it’s hope in every bottle. Expertly designed to fit your car cup holder, gym bag, or desk, EcoSip seamlessly integrates into your lifestyle while funding an ocean cleanup program that removes 1,000 bottles from our beaches with every purchase. Every sip brings us closer to a cleaner world. Ready to drink with purpose?
                         </p>
                         <div class="about-stats">
                             <div class="stat-card">
@@ -650,14 +652,13 @@
 
     <script src="script.js"></script>
     <script>
-    // Enhanced Interactive 2D Bottle
+    // Enhanced Interactive Realistic Bottle
     document.addEventListener('DOMContentLoaded', function() {
         const bottle = document.querySelector('.interactive-bottle');
         const cap = document.querySelector('.bottle-cap');
         const water = document.querySelector('.bottle-water');
-        const logo = document.querySelector('.bottle-logo img');
         
-        if (bottle && cap && water && logo) {
+        if (bottle && cap && water) {
             let isAnimating = false;
             let mouseX = 0, mouseY = 0;
             let bottleRotation = { x: 0, y: 0 };
@@ -669,13 +670,10 @@
                 mouseY = (e.clientY - rect.top - rect.height / 2) / (rect.height / 2);
                 
                 // Smooth rotation with easing
-                bottleRotation.x += (mouseY * 20 - bottleRotation.x) * 0.1;
-                bottleRotation.y += (mouseX * 25 - bottleRotation.y) * 0.1;
+                bottleRotation.x += (mouseY * 15 - bottleRotation.x) * 0.1;
+                bottleRotation.y += (mouseX * 20 - bottleRotation.y) * 0.1;
                 
                 bottle.style.transform = `perspective(1000px) rotateX(${bottleRotation.x}deg) rotateY(${bottleRotation.y}deg)`;
-                
-                // Parallax effect on logo
-                logo.style.transform = `rotateY(${mouseX * 30}deg) rotateX(${mouseY * 20}deg)`;
             });
             
             // Reset bottle position on mouse leave
@@ -683,10 +681,9 @@
                 bottleRotation.x = 0;
                 bottleRotation.y = 0;
                 bottle.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
-                logo.style.transform = 'rotateY(0deg) rotateX(0deg)';
             });
             
-            // Enhanced click to open/close cap with sound effect simulation
+            // Enhanced click to open/close cap with realistic effects
             bottle.addEventListener('click', function() {
                 if (isAnimating) return;
                 isAnimating = true;
@@ -701,7 +698,7 @@
                     left: 50%;
                     width: 0;
                     height: 0;
-                    background: radial-gradient(circle, rgba(0, 255, 136, 0.3) 0%, transparent 70%);
+                    background: radial-gradient(circle, rgba(0, 255, 136, 0.2) 0%, transparent 70%);
                     border-radius: 50%;
                     transform: translate(-50%, -50%);
                     pointer-events: none;
@@ -724,7 +721,7 @@
                     document.head.removeChild(style);
                 }, 600);
                 
-                // Enhanced cap animation
+                // Enhanced cap animation with realistic physics
                 if (isOpening) {
                     cap.classList.add('cap-open');
                     water.classList.add('water-visible');
@@ -734,6 +731,15 @@
                     setTimeout(() => {
                         water.style.animation = '';
                     }, 800);
+                    
+                    // Add condensation effect
+                    const condensation = document.querySelector('.bottle-condensation');
+                    if (condensation) {
+                        condensation.style.animation = 'condensation-increase 1s ease-out';
+                        setTimeout(() => {
+                            condensation.style.animation = '';
+                        }, 1000);
+                    }
                 } else {
                     cap.classList.remove('cap-open');
                     water.classList.remove('water-visible');
@@ -768,9 +774,6 @@
                     water.classList.remove('water-visible');
                     water.style.opacity = 0;
                 }
-                
-                // Logo rotation based on scroll
-                logo.style.transform = `rotateY(${scrollPercent * 180}deg)`;
             });
             
             // Touch interactions for mobile
@@ -791,8 +794,8 @@
                 const deltaX = touchX - touchStartX;
                 
                 // Tilt bottle based on touch movement
-                const tiltX = Math.max(-15, Math.min(15, deltaY * 0.1));
-                const tiltY = Math.max(-20, Math.min(20, deltaX * 0.1));
+                const tiltX = Math.max(-12, Math.min(12, deltaY * 0.08));
+                const tiltY = Math.max(-15, Math.min(15, deltaX * 0.08));
                 
                 bottle.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
             });
@@ -807,18 +810,16 @@
             splashStyle.textContent = `
                 @keyframes water-splash {
                     0% { transform: translateX(-50%) scale(0.8); opacity: 0; }
-                    50% { transform: translateX(-50%) scale(1.2); opacity: 1; }
-                    100% { transform: translateX(-50%) scale(1.05); opacity: 1; }
+                    50% { transform: translateX(-50%) scale(1.1); opacity: 1; }
+                    100% { transform: translateX(-50%) scale(1.02); opacity: 1; }
+                }
+                @keyframes condensation-increase {
+                    0% { opacity: 0.3; }
+                    50% { opacity: 1; }
+                    100% { opacity: 0.7; }
                 }
             `;
             document.head.appendChild(splashStyle);
-            
-            // Auto-rotate logo on idle
-            let logoRotationInterval = setInterval(() => {
-                if (!isAnimating && !cap.classList.contains('cap-open')) {
-                    logo.style.transform = `rotateY(${Date.now() * 0.02}deg)`;
-                }
-            }, 50);
             
             // Performance optimization
             let ticking = false;
@@ -834,11 +835,11 @@
             
             // Add glow effect on interaction
             bottle.addEventListener('mouseenter', function() {
-                bottle.style.filter = 'drop-shadow(0 0 50px rgba(0, 255, 136, 0.5))';
+                bottle.style.filter = 'drop-shadow(0 0 40px rgba(0, 255, 136, 0.3))';
             });
             
             bottle.addEventListener('mouseleave', function() {
-                bottle.style.filter = 'drop-shadow(0 0 30px rgba(0, 255, 136, 0.3))';
+                bottle.style.filter = 'drop-shadow(0 0 30px rgba(0, 255, 136, 0.2))';
             });
         }
     });
