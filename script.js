@@ -931,3 +931,142 @@ if (window.innerWidth <= 768) {
     });
     window.addEventListener('resize', () => { if (!mq.matches) unlock(); });
 })();
+
+// Enhanced About Section Animations
+function initAboutAnimations() {
+    // Animated counters
+    const statNumbers = document.querySelectorAll('.stat-number[data-target]');
+    
+    const animateCounter = (element, target) => {
+        let current = 0;
+        const increment = target / 100;
+        const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+                current = target;
+                clearInterval(timer);
+            }
+            element.textContent = Math.floor(current).toLocaleString();
+        }, 20);
+    };
+    
+    // Intersection Observer for counters
+    const counterObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const target = parseInt(entry.target.getAttribute('data-target'));
+                animateCounter(entry.target, target);
+                counterObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
+    
+    statNumbers.forEach(stat => {
+        counterObserver.observe(stat);
+    });
+    
+    // Mission card animations
+    const missionCards = document.querySelectorAll('.mission-card');
+    const cardObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }, index * 200);
+            }
+        });
+    }, { threshold: 0.3 });
+    
+    missionCards.forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(50px)';
+        card.style.transition = 'all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+        cardObserver.observe(card);
+    });
+    
+    // Orbit item animations
+    const orbitItems = document.querySelectorAll('.orbit-item');
+    const orbitObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateX(-50%) scale(1)';
+                }, index * 300);
+            }
+        });
+    }, { threshold: 0.5 });
+    
+    orbitItems.forEach(item => {
+        item.style.opacity = '0';
+        item.style.transform = 'translateX(-50%) scale(0.5)';
+        item.style.transition = 'all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+        orbitObserver.observe(item);
+    });
+    
+    // Center glow animation
+    const centerGlow = document.querySelector('.center-glow');
+    if (centerGlow) {
+        const glowObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'glowPulse 4s ease-in-out infinite';
+                }
+            });
+        }, { threshold: 0.5 });
+        glowObserver.observe(centerGlow);
+    }
+    
+    // Particle animations
+    const particles = document.querySelectorAll('.floating-particles .particle');
+    particles.forEach((particle, index) => {
+        particle.style.animationDelay = `${index * 0.5}s`;
+    });
+    
+    // Connecting lines animation
+    const lines = document.querySelectorAll('.connecting-lines .line');
+    const lineObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => {
+                    entry.target.style.animation = 'lineGlow 3s ease-in-out infinite';
+                }, index * 200);
+            }
+        });
+    }, { threshold: 0.5 });
+    
+    lines.forEach(line => {
+        line.style.opacity = '0';
+        lineObserver.observe(line);
+    });
+}
+
+// Enhanced scroll effects for About section
+function initAboutScrollEffects() {
+    const aboutSection = document.querySelector('.about');
+    if (!aboutSection) return;
+    
+    const aboutVisual = document.querySelector('.eco-impact-visualization');
+    const aboutText = document.querySelector('.about-text');
+    
+    window.addEventListener('scroll', () => {
+        const rect = aboutSection.getBoundingClientRect();
+        const scrollPercent = Math.max(0, Math.min(1, 1 - (rect.top + rect.height) / window.innerHeight));
+        
+        if (aboutVisual) {
+            aboutVisual.style.transform = `scale(${1 + scrollPercent * 0.1}) rotate(${scrollPercent * 5}deg)`;
+        }
+        
+        if (aboutText) {
+            aboutText.style.transform = `translateX(${scrollPercent * -20}px)`;
+            aboutText.style.opacity = 1 - scrollPercent * 0.3;
+        }
+    });
+}
+
+// Initialize all About section animations
+document.addEventListener('DOMContentLoaded', function() {
+    initAboutAnimations();
+    initAboutScrollEffects();
+});
