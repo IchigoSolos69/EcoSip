@@ -366,6 +366,111 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+// Contact form functionality
+document.addEventListener('DOMContentLoaded', () => {
+    const contactForm = document.querySelector('.contact-form');
+    
+    if (contactForm) {
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(this);
+            const name = formData.get('name');
+            const email = formData.get('email');
+            const subject = formData.get('subject');
+            const message = formData.get('message');
+            
+            // Simple validation
+            if (!name || !email || !subject || !message) {
+                showNotification('Please fill in all fields', 'error');
+                return;
+            }
+            
+            // Simulate form submission
+            const submitButton = this.querySelector('.form-submit');
+            const originalText = submitButton.innerHTML;
+            
+            submitButton.innerHTML = 'Sending... <span class="btn-arrow">⏳</span>';
+            submitButton.disabled = true;
+            
+            // Simulate API call
+            setTimeout(() => {
+                submitButton.innerHTML = 'Message Sent! <span class="btn-arrow">✓</span>';
+                submitButton.style.background = 'var(--neon-green)';
+                
+                showNotification('Thank you! Your message has been sent successfully.', 'success');
+                
+                // Reset form
+                this.reset();
+                
+                // Reset button after delay
+                setTimeout(() => {
+                    submitButton.innerHTML = originalText;
+                    submitButton.style.background = '';
+                    submitButton.disabled = false;
+                }, 3000);
+            }, 2000);
+        });
+    }
+});
+
+// Notification system
+function showNotification(message, type = 'info') {
+    // Remove existing notifications
+    const existingNotifications = document.querySelectorAll('.notification');
+    existingNotifications.forEach(notification => notification.remove());
+    
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.innerHTML = `
+        <span class="notification-message">${message}</span>
+        <button class="notification-close">&times;</button>
+    `;
+    
+    // Add to page
+    document.body.appendChild(notification);
+    
+    // Show notification
+    setTimeout(() => notification.classList.add('show'), 100);
+    
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => notification.remove(), 300);
+    }, 5000);
+    
+    // Close button functionality
+    notification.querySelector('.notification-close').addEventListener('click', () => {
+        notification.classList.remove('show');
+        setTimeout(() => notification.remove(), 300);
+    });
+}
+
+// Enhanced form input animations
+document.addEventListener('DOMContentLoaded', () => {
+    const formInputs = document.querySelectorAll('.form-input');
+    
+    formInputs.forEach(input => {
+        // Handle input focus and blur for label animations
+        input.addEventListener('focus', function() {
+            this.parentElement.classList.add('focused');
+        });
+        
+        input.addEventListener('blur', function() {
+            if (!this.value) {
+                this.parentElement.classList.remove('focused');
+            }
+        });
+        
+        // Check if input has value on load
+        if (input.value) {
+            input.parentElement.classList.add('focused');
+        }
+    });
+});
+
 // Smooth reveal animations for sections
 const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -715,12 +820,61 @@ class EcoSipBottle3D {
     }
 }
 
-// Initialize 3D bottle when DOM is loaded
+// Mobile Menu Functionality
+document.addEventListener('DOMContentLoaded', () => {
+    const mobileToggle = document.querySelector('.mobile-menu-toggle');
+    const navMenu = document.querySelector('.nav-menu');
+    const navLinks = document.querySelectorAll('.nav-link');
+    
+    if (mobileToggle && navMenu) {
+        mobileToggle.addEventListener('click', () => {
+            mobileToggle.classList.toggle('active');
+            navMenu.classList.toggle('active');
+            
+            // Prevent body scroll when menu is open
+            if (navMenu.classList.contains('active')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
+            }
+        });
+        
+        // Close menu when clicking on nav links
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileToggle.classList.remove('active');
+                navMenu.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!mobileToggle.contains(e.target) && !navMenu.contains(e.target)) {
+                mobileToggle.classList.remove('active');
+                navMenu.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+    }
+});
+
+// Mobile-optimized 3D bottle initialization
 document.addEventListener('DOMContentLoaded', () => {
     // Wait for Three.js to load
     setTimeout(() => {
         if (typeof THREE !== 'undefined') {
-            new EcoSipBottle3D();
+            // Check if device is mobile for performance optimization
+            const isMobile = window.innerWidth <= 768;
+            
+            if (isMobile) {
+                // Reduce 3D bottle complexity on mobile
+                const bottle3D = new EcoSipBottle3D();
+                // Reduce animation frequency on mobile
+                bottle3D.reducedPerformance = true;
+            } else {
+                new EcoSipBottle3D();
+            }
         } else {
             console.warn('Three.js not loaded, falling back to 2D bottle');
             // Fallback to 2D bottle if Three.js fails to load
@@ -736,3 +890,59 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }, 100);
 });
+
+// Touch-friendly interactions for mobile
+document.addEventListener('DOMContentLoaded', () => {
+    // Add touch feedback to buttons
+    const buttons = document.querySelectorAll('.btn, .social-icon, .product-card, .testimonial-card');
+    
+    buttons.forEach(button => {
+        button.addEventListener('touchstart', function() {
+            this.style.transform = 'scale(0.98)';
+        });
+        
+        button.addEventListener('touchend', function() {
+            this.style.transform = '';
+        });
+    });
+    
+    // Improve form input experience on mobile
+    const formInputs = document.querySelectorAll('.form-input');
+    formInputs.forEach(input => {
+        // Prevent zoom on iOS when focusing inputs
+        input.addEventListener('focus', function() {
+            if (window.innerWidth <= 768) {
+                const viewport = document.querySelector('meta[name=viewport]');
+                if (viewport) {
+                    viewport.setAttribute('content', 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no');
+                }
+            }
+        });
+        
+        input.addEventListener('blur', function() {
+            if (window.innerWidth <= 768) {
+                const viewport = document.querySelector('meta[name=viewport]');
+                if (viewport) {
+                    viewport.setAttribute('content', 'width=device-width, initial-scale=1');
+                }
+            }
+        });
+    });
+});
+
+// Optimize scroll performance on mobile
+let ticking = false;
+function updateOnScroll() {
+    // Throttle scroll events for better mobile performance
+    if (!ticking) {
+        requestAnimationFrame(() => {
+            // Existing scroll functionality here
+            ticking = false;
+        });
+        ticking = true;
+    }
+}
+
+if (window.innerWidth <= 768) {
+    window.addEventListener('scroll', updateOnScroll, { passive: true });
+}
