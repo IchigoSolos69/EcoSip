@@ -44,7 +44,7 @@ const observer = new IntersectionObserver((entries) => {
 
 // Observe elements for scroll animations
 document.addEventListener('DOMContentLoaded', () => {
-    const animateElements = document.querySelectorAll('.mission-card, .stat-item, .about-intro');
+    const animateElements = document.querySelectorAll('.mission-card, .stat-item, .about-intro, .product-card, .testimonial-card, .highlight-item, .gallery-item');
     
     animateElements.forEach(el => {
         el.style.opacity = '0';
@@ -89,9 +89,128 @@ const statsObserver = new IntersectionObserver((entries) => {
 
 document.addEventListener('DOMContentLoaded', () => {
     const statsSection = document.querySelector('.stats-section');
+    const testimonialsStats = document.querySelector('.testimonials-stats');
+    
     if (statsSection) {
         statsObserver.observe(statsSection);
     }
+    
+    if (testimonialsStats) {
+        statsObserver.observe(testimonialsStats);
+    }
+});
+
+// Gallery Slider Functionality
+class GallerySlider {
+    constructor() {
+        this.currentSlide = 0;
+        this.slides = document.querySelectorAll('.slide');
+        this.dots = document.querySelectorAll('.dot');
+        this.prevBtn = document.querySelector('.prev-btn');
+        this.nextBtn = document.querySelector('.next-btn');
+        this.totalSlides = this.slides.length;
+        
+        this.init();
+    }
+    
+    init() {
+        if (this.prevBtn) this.prevBtn.addEventListener('click', () => this.prevSlide());
+        if (this.nextBtn) this.nextBtn.addEventListener('click', () => this.nextSlide());
+        
+        this.dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => this.goToSlide(index));
+        });
+        
+        // Auto-play slider
+        this.startAutoPlay();
+        
+        // Pause auto-play on hover
+        const slider = document.querySelector('.gallery-slider');
+        if (slider) {
+            slider.addEventListener('mouseenter', () => this.stopAutoPlay());
+            slider.addEventListener('mouseleave', () => this.startAutoPlay());
+        }
+    }
+    
+    goToSlide(index) {
+        // Remove active class from current slide and dot
+        this.slides[this.currentSlide].classList.remove('active');
+        this.dots[this.currentSlide].classList.remove('active');
+        
+        // Update current slide
+        this.currentSlide = index;
+        
+        // Add active class to new slide and dot
+        this.slides[this.currentSlide].classList.add('active');
+        this.dots[this.currentSlide].classList.add('active');
+    }
+    
+    nextSlide() {
+        const next = (this.currentSlide + 1) % this.totalSlides;
+        this.goToSlide(next);
+    }
+    
+    prevSlide() {
+        const prev = (this.currentSlide - 1 + this.totalSlides) % this.totalSlides;
+        this.goToSlide(prev);
+    }
+    
+    startAutoPlay() {
+        this.autoPlayInterval = setInterval(() => {
+            this.nextSlide();
+        }, 5000);
+    }
+    
+    stopAutoPlay() {
+        if (this.autoPlayInterval) {
+            clearInterval(this.autoPlayInterval);
+        }
+    }
+}
+
+// Initialize gallery slider
+document.addEventListener('DOMContentLoaded', () => {
+    if (document.querySelector('.gallery-slider')) {
+        new GallerySlider();
+    }
+});
+
+// Product card interactions
+document.addEventListener('DOMContentLoaded', () => {
+    const productCards = document.querySelectorAll('.product-card');
+    
+    productCards.forEach(card => {
+        const productShape = card.querySelector('.product-shape');
+        
+        card.addEventListener('mouseenter', () => {
+            if (productShape) {
+                productShape.style.transform = 'scale(1.1) rotate(5deg)';
+            }
+        });
+        
+        card.addEventListener('mouseleave', () => {
+            if (productShape) {
+                productShape.style.transform = 'scale(1) rotate(0deg)';
+            }
+        });
+    });
+});
+
+// Testimonial card hover effects
+document.addEventListener('DOMContentLoaded', () => {
+    const testimonialCards = document.querySelectorAll('.testimonial-card');
+    
+    testimonialCards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.background = 'linear-gradient(135deg, rgba(17, 17, 17, 0.9), rgba(0, 255, 136, 0.05))';
+            this.style.transform = 'translateY(-5px) scale(1.02)';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.background = '#111111';
+            this.style.transform = 'translateY(0) scale(1)';
+        });
+    });
 });
 
 // Particle system enhancement
@@ -218,3 +337,60 @@ window.addEventListener('scroll', () => {
         particle.style.transform = `translateY(${scrolled * speed}px)`;
     });
 });
+
+// Add to cart functionality
+document.addEventListener('DOMContentLoaded', () => {
+    const addToCartButtons = document.querySelectorAll('.btn-primary, .btn-secondary');
+    
+    addToCartButtons.forEach(button => {
+        if (button.textContent.includes('Add to Cart')) {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Create success animation
+                const originalText = this.textContent;
+                this.textContent = 'Added! ✓';
+                this.style.background = 'var(--neon-green)';
+                this.style.color = 'var(--primary-bg)';
+                this.style.boxShadow = '0 0 20px var(--neon-green)';
+                
+                // Reset after animation
+                setTimeout(() => {
+                    this.textContent = originalText;
+                    this.style.background = '';
+                    this.style.color = '';
+                    this.style.boxShadow = '';
+                }, 2000);
+            });
+        }
+    });
+});
+
+// Smooth reveal animations for sections
+const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('revealed');
+        }
+    });
+}, { threshold: 0.1 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const sections = document.querySelectorAll('section');
+    sections.forEach(section => {
+        section.style.opacity = '0';
+        section.style.transform = 'translateY(50px)';
+        section.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+        revealObserver.observe(section);
+    });
+});
+
+// Add CSS for reveal animations
+const revealStyle = document.createElement('style');
+revealStyle.textContent = `
+    section.revealed {
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+    }
+`;
+document.head.appendChild(revealStyle);

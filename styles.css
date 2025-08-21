@@ -528,6 +528,484 @@ body {
     line-height: 1.2;
 }
 
+/* Product Showcase Section */
+.products {
+    padding: 8rem 0;
+    background: linear-gradient(180deg, var(--secondary-bg) 0%, var(--primary-bg) 100%);
+    position: relative;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 3rem;
+    margin-bottom: 4rem;
+}
+
+.product-card {
+    background: var(--card-bg);
+    border-radius: 25px;
+    padding: 2rem;
+    border: 1px solid rgba(0, 255, 136, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.product-card:hover {
+    transform: translateY(-10px);
+    border-color: var(--neon-green);
+    box-shadow: var(--shadow-neon);
+}
+
+.product-card.featured {
+    border-color: var(--neon-green);
+    box-shadow: var(--shadow-neon);
+    background: linear-gradient(135deg, var(--card-bg), rgba(0, 255, 136, 0.05));
+}
+
+.product-image {
+    position: relative;
+    height: 200px;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.product-glow {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    background: var(--gradient-primary);
+    opacity: 0.3;
+    filter: blur(30px);
+    border-radius: 50%;
+}
+
+.product-shape {
+    width: 80px;
+    height: 120px;
+    border-radius: 15px 15px 25px 25px;
+    border: 2px solid rgba(0, 255, 136, 0.5);
+    position: relative;
+    z-index: 2;
+    transition: all 0.3s ease;
+}
+
+.eco-classic {
+    background: linear-gradient(145deg, rgba(0, 255, 136, 0.3), rgba(0, 212, 255, 0.3));
+}
+
+.eco-sport {
+    background: linear-gradient(145deg, rgba(0, 212, 255, 0.3), rgba(0, 255, 136, 0.3));
+    height: 100px;
+}
+
+.eco-premium {
+    background: linear-gradient(145deg, rgba(255, 0, 170, 0.3), rgba(0, 255, 136, 0.3));
+    height: 140px;
+}
+
+.product-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: var(--gradient-primary);
+    color: var(--primary-bg);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    z-index: 3;
+}
+
+.product-name {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.product-description {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.product-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+.feature-tag {
+    background: rgba(0, 255, 136, 0.1);
+    color: var(--neon-green);
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    border: 1px solid rgba(0, 255, 136, 0.2);
+}
+
+.product-price {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.price {
+    font-size: 1.8rem;
+    font-weight: 700;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.product-highlights {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 4rem;
+}
+
+.highlight-item {
+    text-align: center;
+    padding: 2rem;
+    background: rgba(0, 255, 136, 0.05);
+    border-radius: 20px;
+    border: 1px solid rgba(0, 255, 136, 0.1);
+    transition: all 0.3s ease;
+}
+
+.highlight-item:hover {
+    transform: translateY(-5px);
+    border-color: var(--neon-green);
+    box-shadow: var(--shadow-neon);
+}
+
+.highlight-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1.5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--gradient-primary);
+}
+
+.icon-temperature, .icon-tracking, .icon-eco-friendly {
+    width: 40px;
+    height: 40px;
+    background: var(--primary-bg);
+    border-radius: 50%;
+    position: relative;
+}
+
+.highlight-item h4 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.highlight-item p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+/* Testimonials Section */
+.testimonials {
+    padding: 8rem 0;
+    background: linear-gradient(180deg, var(--primary-bg) 0%, var(--secondary-bg) 100%);
+    position: relative;
+}
+
+.testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 4rem;
+}
+
+.testimonial-card {
+    background: var(--card-bg);
+    border-radius: 20px;
+    padding: 2rem;
+    border: 1px solid rgba(0, 255, 136, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.testimonial-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--neon-green);
+    box-shadow: var(--shadow-neon);
+}
+
+.testimonial-card.featured {
+    border-color: var(--neon-green);
+    box-shadow: var(--shadow-neon);
+    background: linear-gradient(135deg, var(--card-bg), rgba(0, 255, 136, 0.05));
+}
+
+.stars {
+    color: var(--neon-green);
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.testimonial-text {
+    color: var(--text-secondary);
+    font-style: italic;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.author-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--gradient-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.avatar-placeholder {
+    color: var(--primary-bg);
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.author-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.2rem;
+}
+
+.author-title {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.testimonials-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+/* Gallery Section */
+.gallery {
+    padding: 8rem 0;
+    background: linear-gradient(180deg, var(--secondary-bg) 0%, var(--primary-bg) 100%);
+    position: relative;
+}
+
+.gallery-container {
+    margin-bottom: 4rem;
+}
+
+.gallery-slider {
+    position: relative;
+    height: 500px;
+    border-radius: 25px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+.slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.slide.active {
+    opacity: 1;
+}
+
+.slide-content {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.slide-image {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.lifestyle-1 {
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.3), rgba(0, 212, 255, 0.3)), 
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500"><rect width="800" height="500" fill="%23000"/><circle cx="200" cy="150" r="50" fill="%2300ff88" opacity="0.3"/><circle cx="600" cy="350" r="80" fill="%2300d4ff" opacity="0.3"/></svg>');
+}
+
+.lifestyle-2 {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.3), rgba(0, 255, 136, 0.3)), 
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500"><rect width="800" height="500" fill="%23000"/><rect x="100" y="100" width="200" height="300" fill="%2300ff88" opacity="0.2"/><rect x="500" y="200" width="150" height="200" fill="%2300d4ff" opacity="0.2"/></svg>');
+}
+
+.lifestyle-3 {
+    background: linear-gradient(135deg, rgba(255, 0, 170, 0.3), rgba(0, 255, 136, 0.3)), 
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500"><rect width="800" height="500" fill="%23000"/><ellipse cx="400" cy="250" rx="300" ry="150" fill="%2300d4ff" opacity="0.2"/></svg>');
+}
+
+.lifestyle-4 {
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.3), rgba(255, 0, 170, 0.3)), 
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500"><rect width="800" height="500" fill="%23000"/><polygon points="200,100 300,200 200,300 100,200" fill="%2300ff88" opacity="0.3"/><polygon points="600,200 700,300 600,400 500,300" fill="%2300d4ff" opacity="0.3"/></svg>');
+}
+
+.image-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    padding: 3rem 2rem 2rem;
+    color: var(--text-primary);
+}
+
+.image-overlay h3 {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.image-overlay p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+}
+
+.slider-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+}
+
+.slider-btn {
+    background: transparent;
+    border: 2px solid var(--aqua-blue);
+    color: var(--aqua-blue);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.slider-btn:hover {
+    background: var(--aqua-blue);
+    color: var(--primary-bg);
+    box-shadow: var(--shadow-aqua);
+    transform: scale(1.1);
+}
+
+.btn-arrow {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.slider-dots {
+    display: flex;
+    gap: 1rem;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.dot.active {
+    background: var(--neon-green);
+    box-shadow: 0 0 10px var(--neon-green);
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.gallery-item {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.gallery-item:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-neon);
+}
+
+.gallery-image {
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.gym {
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.3), rgba(0, 212, 255, 0.3)), 
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200"><rect width="400" height="200" fill="%23000"/><circle cx="100" cy="100" r="30" fill="%2300ff88" opacity="0.4"/><circle cx="300" cy="100" r="30" fill="%2300d4ff" opacity="0.4"/></svg>');
+}
+
+.hiking {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.3), rgba(0, 255, 136, 0.3)), 
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200"><rect width="400" height="200" fill="%23000"/><polygon points="50,150 100,100 150,120 200,80 250,100 300,60 350,80" stroke="%2300ff88" stroke-width="3" fill="none" opacity="0.6"/></svg>');
+}
+
+.office {
+    background: linear-gradient(135deg, rgba(255, 0, 170, 0.3), rgba(0, 255, 136, 0.3)), 
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200"><rect width="400" height="200" fill="%23000"/><rect x="100" y="50" width="200" height="100" fill="%2300d4ff" opacity="0.3"/></svg>');
+}
+
+.travel {
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.3), rgba(255, 0, 170, 0.3)), 
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200"><rect width="400" height="200" fill="%23000"/><circle cx="200" cy="100" r="40" fill="%2300ff88" opacity="0.4"/><circle cx="200" cy="100" r="20" fill="%2300d4ff" opacity="0.6"/></svg>');
+}
+
+.gallery-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    padding: 1rem;
+    color: var(--text-primary);
+    text-align: center;
+    font-weight: 600;
+}
+
 /* Footer */
 .footer {
     background: var(--secondary-bg);
@@ -624,5 +1102,29 @@ body {
     
     .btn {
         width: 200px;
+    }
+    
+    .product-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .testimonials-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .testimonials-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .gallery-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .gallery-slider {
+        height: 300px;
+    }
+    
+    .product-highlights {
+        grid-template-columns: 1fr;
     }
 }
