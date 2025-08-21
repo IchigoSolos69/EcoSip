@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>EcoSip Bottle GLB Exporter</title>
+	<style>
+		body { margin: 0; background: #000; color: #e6fff6; font-family: Inter, system-ui, Arial, sans-serif; }
+		#app { height: 100vh; display: grid; grid-template-rows: 1fr auto; }
+		#stage { height: 100%; }
+		.toolbar { padding: 12px 16px; background: #0b0b0b; display: flex; gap: 12px; align-items: center; border-top: 1px solid rgba(0,255,136,0.15); }
+		button { background: linear-gradient(135deg,#00ff88,#00d4ff); color: #000; border: 0; padding: 10px 14px; border-radius: 10px; font-weight: 700; cursor: pointer; }
+		.info { opacity: 0.75; font-size: 13px; }
+	</style>
+</head>
+<body>
+	<div id="app">
+		<div id="stage"></div>
+		<div class="toolbar">
+			<button id="download">Export GLB</button>
+			<div class="info">This generates a temporary EcoSip bottle (.glb). Save it to assets/ecosip_bottle.glb</div>
+		</div>
+	</div>
+
+	<script type="module">
+	import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+	import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js';
+	import { GLTFExporter } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/exporters/GLTFExporter.js';
+
+	const stage = document.getElementById('stage');
+	const scene = new THREE.Scene();
+	scene.background = new THREE.Color(0x000000);
+	const camera = new THREE.PerspectiveCamera(48, stage.clientWidth/stage.clientHeight, 0.1, 100);
+	camera.position.set(0, 0.9, 3.2);
+	const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+	renderer.setSize(stage.clientWidth, stage.clientHeight);
+	renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+	renderer.toneMapping = THREE.ACESFilmicToneMapping;
+	renderer.outputEncoding = THREE.sRGBEncoding;
+	stage.appendChild(renderer.domElement);
+
+	scene.add(new THREE.AmbientLight(0x303030));
+	const key = new THREE.DirectionalLight(0xffffff, 1.2); key.position.set(4,6,6); scene.add(key);
+	const aqua = new THREE.PointLight(0x00d4ff, 1.2, 10); aqua.position.set(-2,1,2); scene.add(aqua);
+	const neon = new THREE.PointLight(0x00ff88, 1.0, 10); neon.position.set(2,-1,-2); scene.add(neon);
+
+	const controls = new OrbitControls(camera, renderer.domElement);
+	controls.enableDamping = true; controls.enablePan = false;
+
+	// Build procedural bottle group similar to site placeholder
+	const root = new THREE.Group();
+	root.name = 'EcoSip_Bottle';
+	scene.add(root);
+
+	// Body via lathe
+	const profile = [
+		new THREE.Vector2(0.00, -1.4),
+		new THREE.Vector2(0.55, -1.4),
+		new THREE.Vector2(0.62, -0.6),
+		new THREE.Vector2(0.66,  0.2),
+		new THREE.Vector2(0.58,  0.8),
+		new THREE.Vector2(0.45,  1.2),
+		new THREE.Vector2(0.34,  1.5),
+		new THREE.Vector2(0.28,  1.8)
+	];
+	const bodyGeo = new THREE.LatheGeometry(profile, 64);
+	const glassMat = new THREE.MeshPhysicalMaterial({
+		color: 0xffffff, metalness: 0.0, roughness: 0.06, transparent: true, opacity: 0.5,
+		transmission: 0.96, ior: 1.5, thickness: 0.35,
+		attenuationColor: new THREE.Color(0x00d4ff), attenuationDistance: 3.0,
+		clearcoat: 1.0, clearcoatRoughness: 0.06
+	});
+	const body = new THREE.Mesh(bodyGeo, glassMat); body.name = 'Bottle_Body'; root.add(body);
+
+	// Neck ring
+	const ring = new THREE.Mesh(new THREE.TorusGeometry(0.29, 0.03, 16, 64), new THREE.MeshStandardMaterial({ color: 0x00ff88, metalness: 0.9, roughness: 0.2 }));
+	ring.name = 'Rim_Ring'; ring.position.y = 1.55; ring.rotation.x = Math.PI/2; root.add(ring);
+
+	// Hinge + cap
+	const hinge = new THREE.Group(); hinge.name = 'Cap_Hinge'; hinge.position.set(0, 1.8, 0.3); root.add(hinge);
+	const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.33, 0.33, 0.35, 48), new THREE.MeshStandardMaterial({ color: 0x00ff88, metalness: 0.9, roughness: 0.2 }));
+	cap.name = 'Cap'; cap.position.set(0,0,-0.3); hinge.add(cap);
+
+	// Water
+	const water = new THREE.Mesh(new THREE.CylinderGeometry(0.6, 0.68, 2.2, 48), new THREE.MeshPhysicalMaterial({ color: 0x00d4ff, transparent: true, opacity: 0.35, transmission: 1.0, ior: 1.33, thickness: 0.25, roughness: 0.02 }));
+	water.name = 'Water'; water.position.y = -0.05; root.add(water);
+
+	// Simple emissive logo plate
+	const logoGeo = new THREE.PlaneGeometry(0.7, 0.7);
+	const logoMat = new THREE.MeshBasicMaterial({ color: 0x00ff88, transparent: true, opacity: 0.9 });
+	const logo = new THREE.Mesh(logoGeo, logoMat); logo.name = 'Logo_Geo'; logo.position.set(0, 0.4, 0.71); root.add(logo);
+
+	// Idle motion
+	function animate() { requestAnimationFrame(animate); controls.update(); renderer.render(scene, camera); }
+	animate();
+
+	// Export
+	document.getElementById('download').addEventListener('click', () => {
+		const exporter = new GLTFExporter();
+		exporter.parse(root, (glb) => {
+			const blob = new Blob([glb], { type: 'model/gltf-binary' });
+			const a = document.createElement('a');
+			a.href = URL.createObjectURL(blob);
+			a.download = 'ecosip_bottle.glb';
+			a.click();
+			URL.revokeObjectURL(a.href);
+		}, { binary: true, animations: [] });
+	});
+
+	new ResizeObserver(() => {
+		const w = stage.clientWidth, h = stage.clientHeight;
+		camera.aspect = w/h; camera.updateProjectionMatrix(); renderer.setSize(w,h);
+	}).observe(stage);
+	</script>
+</body>
+</html>
