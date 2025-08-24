@@ -926,9 +926,16 @@ body {
 
 .testimonials-stats {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4rem;
     margin-top: 3rem;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 2rem;
+    background: rgba(17, 17, 17, 0.6);
+    border-radius: 20px;
+    border: 1px solid rgba(0, 255, 136, 0.1);
 }
 
 .contact-hero {
@@ -959,7 +966,9 @@ body {
     
     .testimonials-stats {
         grid-template-columns: repeat(2, 1fr);
-        gap: 1.5rem;
+        gap: 2rem;
+        padding: 1.5rem;
+        max-width: 100%;
     }
 }
 
@@ -1686,13 +1695,40 @@ body {
     margin-top: 4rem;
 }
 
-.highlight-item {
+.testimonials .stat-item {
     text-align: center;
-    padding: 2rem;
-    background: rgba(0, 255, 136, 0.05);
-    border-radius: 20px;
+    padding: 3rem 2rem;
+    background: var(--card-bg);
+    border-radius: 15px;
     border: 1px solid rgba(0, 255, 136, 0.1);
     transition: all 0.3s ease;
+    min-height: 140px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.testimonials .stat-item:hover {
+    transform: translateY(-5px);
+    border-color: var(--neon-green);
+    box-shadow: 0 20px 40px rgba(0, 255, 136, 0.2);
+}
+
+.testimonials .stat-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 2px;
+    background: var(--gradient-primary);
+    transition: left 0.4s ease;
+}
+
+.testimonials .stat-item:hover::before {
+    left: 0;
 }
 
 .highlight-item:hover {
@@ -1816,9 +1852,16 @@ body {
 
 .testimonials-stats {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4rem;
     margin-top: 3rem;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 2rem;
+    background: rgba(17, 17, 17, 0.6);
+    border-radius: 20px;
+    border: 1px solid rgba(0, 255, 136, 0.1);
 }
 
 /* Gallery Section */
@@ -2984,7 +3027,9 @@ textarea.form-input {
     
     .testimonials-stats {
         grid-template-columns: repeat(2, 1fr);
-        gap: 1.5rem;
+        gap: 2rem;
+        padding: 1.5rem;
+        max-width: 100%;
     }
     
     .contact-grid {
