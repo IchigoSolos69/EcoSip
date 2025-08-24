@@ -3166,3 +3166,104 @@ html, body {
             inset 0 0 15px rgba(255, 255, 255, 0.3);
     }
 }
+
+/* Bottle Images */
+.bottle-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    max-height: 200px;
+    transition: all 0.3s ease;
+    filter: drop-shadow(0 10px 20px rgba(0, 255, 136, 0.2));
+    position: relative;
+    z-index: 2;
+}
+
+.product-card:hover .bottle-image {
+    transform: scale(1.05) translateY(-5px);
+    filter: drop-shadow(0 15px 30px rgba(0, 255, 136, 0.3));
+}
+
+.product-card.featured .bottle-image {
+    max-height: 220px;
+}
+
+/* Product Image Container */
+.product-image {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    overflow: hidden;
+    border-radius: 15px;
+    background: linear-gradient(135deg, 
+        rgba(0, 255, 136, 0.05) 0%,
+        rgba(0, 212, 255, 0.05) 100%);
+    border: 1px solid rgba(0, 255, 136, 0.1);
+}
+
+.product-card.featured .product-image {
+    height: 220px;
+    background: linear-gradient(135deg, 
+        rgba(0, 255, 136, 0.1) 0%,
+        rgba(0, 212, 255, 0.1) 100%);
+    border: 1px solid rgba(0, 255, 136, 0.2);
+}
+
+.product-image:hover {
+    background: linear-gradient(135deg, 
+        rgba(0, 255, 136, 0.1) 0%,
+        rgba(0, 212, 255, 0.1) 100%);
+    border-color: rgba(0, 255, 136, 0.3);
+}
+
+/* Product Glow Effect */
+.product-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    height: 80%;
+    background: radial-gradient(circle, 
+        rgba(0, 255, 136, 0.1) 0%,
+        rgba(0, 212, 255, 0.05) 50%,
+        transparent 100%);
+    border-radius: 50%;
+    z-index: 1;
+    animation: glowPulse 3s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+    0%, 100% { 
+        opacity: 0.5; 
+        transform: translate(-50%, -50%) scale(1);
+    }
+    50% { 
+        opacity: 0.8; 
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+}
+
+/* Mobile responsive for bottle images */
+@media (max-width: 768px) {
+    .bottle-image {
+        max-height: 150px;
+    }
+    
+    .product-card.featured .bottle-image {
+        max-height: 170px;
+    }
+    
+    .product-image {
+        height: 150px;
+    }
+    
+    .product-card.featured .product-image {
+        height: 170px;
+    }
+}
