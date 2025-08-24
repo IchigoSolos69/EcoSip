@@ -689,8 +689,8 @@ body {
 
 .mission-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Changed to 2 columns for 2x2 layout */
-    gap: 25px;
+    grid-template-columns: repeat(2, 1fr); /* 2 columns for 2x2 layout */
+    gap: 30px; /* Increased gap for better spacing */
     margin-top: 20px;
     width: 100%; /* Ensure full width usage */
 }
@@ -872,17 +872,18 @@ body {
     background: rgba(0, 0, 0, 0.7);
     border: 2px solid var(--neon-green);
     border-radius: 15px;
-    padding: 25px;
+    padding: 30px; /* Increased padding for more spacious feel */
     text-align: center;
     backdrop-filter: blur(10px);
     box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
-    min-height: 280px; /* Ensure consistent height */
+    min-height: 300px; /* Increased height for better proportions */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    min-width: 400px; /* Added minimum width for better horizontal sizing */
 }
 
 .mission-card:hover {
@@ -896,37 +897,38 @@ body {
 }
 
 .card-icon {
-    width: 60px;
-    height: 60px;
-    margin: 0 auto 20px;
+    width: 70px; /* Increased icon size */
+    height: 70px; /* Increased icon size */
+    margin: 0 auto 25px; /* Increased margin */
     display: flex;
     align-items: center;
     justify-content: center;
     background: linear-gradient(135deg, var(--neon-green), var(--aqua-blue));
-    border-radius: 15px;
-    box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+    border-radius: 18px; /* Increased border radius */
+    box-shadow: 0 0 25px rgba(0, 255, 136, 0.3);
 }
 
 .card-title {
-    font-size: 1.3rem;
+    font-size: 1.4rem; /* Increased font size */
     font-weight: 600;
     color: var(--neon-green);
-    margin-bottom: 15px;
+    margin-bottom: 20px; /* Increased margin */
     line-height: 1.3;
 }
 
 .card-description {
-    font-size: 0.95rem;
-    line-height: 1.6;
+    font-size: 1rem; /* Increased font size */
+    line-height: 1.7; /* Increased line height */
     color: #e6fff6;
-    margin-bottom: 20px;
+    margin-bottom: 25px; /* Increased margin */
     flex-grow: 1;
+    max-width: 100%; /* Ensure text uses full card width */
 }
 
 .card-features {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 12px; /* Increased gap between feature tags */
     justify-content: center;
     margin-top: auto;
 }
@@ -935,12 +937,13 @@ body {
     background: rgba(0, 255, 136, 0.1);
     border: 1px solid var(--neon-green);
     color: var(--neon-green);
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 0.8rem;
+    padding: 8px 16px; /* Increased padding */
+    border-radius: 25px; /* Increased border radius */
+    font-size: 0.85rem; /* Increased font size */
     font-weight: 500;
     transition: all 0.3s ease;
     cursor: pointer;
+    min-width: 120px; /* Added minimum width for feature tags */
 }
 
 .feature:hover {
@@ -952,35 +955,37 @@ body {
     transform: scale(1.05);
 }
 
-/* Responsive adjustments for 2x2 layout */
+/* Responsive adjustments for better horizontal sizing */
 @media (max-width: 1400px) {
     .mission-grid {
         grid-template-columns: repeat(2, 1fr);
-        gap: 20px;
+        gap: 25px;
     }
     
     .mission-card {
-        padding: 20px;
-        min-height: 260px;
+        padding: 25px;
+        min-height: 280px;
+        min-width: 350px; /* Adjusted minimum width */
     }
     
     .card-title {
-        font-size: 1.2rem;
+        font-size: 1.3rem;
     }
     
     .card-description {
-        font-size: 0.9rem;
+        font-size: 0.95rem;
     }
 }
 
 @media (max-width: 1200px) {
     .mission-grid {
         grid-template-columns: repeat(2, 1fr); /* Keep 2x2 on medium screens */
-        gap: 20px;
+        gap: 25px;
     }
     
     .mission-card {
-        min-height: 280px;
+        min-height: 300px;
+        min-width: 320px; /* Adjusted for medium screens */
     }
 }
 
@@ -993,6 +998,7 @@ body {
     .mission-card {
         min-height: auto;
         padding: 25px;
+        min-width: 100%; /* Full width on mobile */
     }
     
     .card-title {
@@ -1006,6 +1012,7 @@ body {
     .feature {
         font-size: 0.85rem;
         padding: 8px 15px;
+        min-width: 100px; /* Adjusted for mobile */
     }
 }
 
