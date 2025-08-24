@@ -782,13 +782,14 @@ body {
     max-width: 100%; /* Full width for horizontal layout */
     margin: 0 auto; /* Center the stats section */
     padding: 0 20px; /* Add horizontal padding for better spacing */
+    width: 100%; /* Ensure full width usage like mission-grid */
 }
 
 .stat-card {
     background: rgba(0, 0, 0, 0.6);
     border: 2px solid var(--neon-green);
     border-radius: 10px; /* Reduced from 15px */
-    padding: 20px; /* Increased from 15px for wider appearance */
+    padding: 25px 20px; /* Increased vertical padding to match mission cards */
     text-align: center;
     backdrop-filter: blur(10px);
     box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
@@ -796,7 +797,11 @@ body {
     min-width: auto; /* Allow natural width */
     position: relative;
     z-index: 2;
-    min-height: 140px; /* Added minimum height for better proportions */
+    min-height: 160px; /* Increased height to match mission cards better */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .stat-icon {
@@ -824,19 +829,21 @@ body {
 
 /* Responsive adjustments - Desktop only */
 @media (max-width: 1400px) {
-.about-content {
+    .about-content {
         grid-template-columns: 1fr; /* Keep single column */
         gap: 40px;
     }
     
     .about-stats {
         grid-template-columns: repeat(2, 1fr); /* Keep 2x2 on larger screens */
-        gap: 18px; /* Slightly reduced gap */
-        max-width: 550px; /* Adjusted max width */
+        gap: 20px; /* Increased gap for better spacing */
+        max-width: 600px; /* Increased max width to match mission cards */
+        width: 100%; /* Ensure full width usage */
     }
     
     .stat-card {
-        padding: 12px; /* Reduced from 22px */
+        padding: 20px 15px; /* Maintain good padding proportions */
+        min-height: 150px; /* Slightly reduced height for medium screens */
     }
 }
 
@@ -854,12 +861,15 @@ body {
         min-width: auto;
         max-width: 600px; /* Increased from 500px */
         margin: 0 auto;
+        width: 100%; /* Ensure full width usage */
     }
     
     .stat-card {
         min-width: auto; /* Allow flex to manage width */
         flex: 1;
         max-width: none; /* Remove max-width constraint */
+        padding: 18px 15px; /* Maintain good padding proportions */
+        min-height: 140px; /* Adjusted height for medium screens */
     }
 }
 
@@ -4381,12 +4391,15 @@ body {
         min-width: auto;
         max-width: 600px; /* Increased from 500px */
         margin: 0 auto;
+        width: 100%; /* Ensure full width usage */
     }
     
     .stat-card {
         min-width: auto; /* Allow flex to manage width */
         flex: 1;
         max-width: none; /* Remove max-width constraint */
+        padding: 18px 15px; /* Maintain good padding proportions */
+        min-height: 140px; /* Adjusted height for medium screens */
     }
 }
 
@@ -4485,14 +4498,55 @@ body::after {
 
 /* Additional Small Particles */
 .floating-particles {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     pointer-events: none;
-    z-index: -3;
+    z-index: 1;
     overflow: hidden;
+}
+
+/* Section-specific particle positioning */
+.hero .floating-particles,
+.products .floating-particles,
+.testimonials .floating-particles,
+.gallery .floating-particles,
+.about .floating-particles,
+.contact .floating-particles,
+.footer .floating-particles {
+    position: absolute;
+    z-index: 1;
+}
+
+/* Section-specific particle animations */
+.hero .floating-particles::before {
+    animation: heroParticles 20s linear infinite;
+}
+
+.products .floating-particles::before {
+    animation: productParticles 25s linear infinite;
+}
+
+.testimonials .floating-particles::before {
+    animation: testimonialParticles 22s linear infinite;
+}
+
+.gallery .floating-particles::before {
+    animation: galleryParticles 28s linear infinite;
+}
+
+.about .floating-particles::before {
+    animation: aboutParticles 24s linear infinite;
+}
+
+.contact .floating-particles::before {
+    animation: contactParticles 26s linear infinite;
+}
+
+.footer .floating-particles::before {
+    animation: footerParticles 30s linear infinite;
 }
 
 .floating-particles::before {
@@ -4524,6 +4578,49 @@ body::after {
     100% {
         transform: translateY(0px) translateX(0px) rotate(360deg);
     }
+}
+
+/* Section-specific particle keyframes */
+@keyframes heroParticles {
+    0% { transform: translateY(0px) translateX(0px) rotate(0deg); }
+    50% { transform: translateY(-25px) translateX(20px) rotate(180deg); }
+    100% { transform: translateY(0px) translateX(0px) rotate(360deg); }
+}
+
+@keyframes productParticles {
+    0% { transform: translateY(0px) translateX(0px) rotate(0deg); }
+    50% { transform: translateY(-30px) translateX(-15px) rotate(270deg); }
+    100% { transform: translateY(0px) translateX(0px) rotate(360deg); }
+}
+
+@keyframes testimonialParticles {
+    0% { transform: translateY(0px) translateX(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) translateX(25px) rotate(90deg); }
+    100% { transform: translateY(0px) translateX(0px) rotate(360deg); }
+}
+
+@keyframes galleryParticles {
+    0% { transform: translateY(0px) translateX(0px) rotate(0deg); }
+    50% { transform: translateY(-35px) translateX(10px) rotate(180deg); }
+    100% { transform: translateY(0px) translateX(0px) rotate(360deg); }
+}
+
+@keyframes aboutParticles {
+    0% { transform: translateY(0px) translateX(0px) rotate(0deg); }
+    50% { transform: translateY(-15px) translateX(-20px) rotate(135deg); }
+    100% { transform: translateY(0px) translateX(0px) rotate(360deg); }
+}
+
+@keyframes contactParticles {
+    0% { transform: translateY(0px) translateX(0px) rotate(0deg); }
+    50% { transform: translateY(-25px) translateX(15px) rotate(225deg); }
+    100% { transform: translateY(0px) translateX(0px) rotate(360deg); }
+}
+
+@keyframes footerParticles {
+    0% { transform: translateY(0px) translateX(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) translateX(-25px) rotate(315deg); }
+    100% { transform: translateY(0px) translateX(0px) rotate(360deg); }
 }
 
 @keyframes globalParticles {
@@ -4770,6 +4867,17 @@ body::after {
     .floating-particles::before {
         background-size: 75px 75px, 100px 100px, 87px 87px, 112px 112px, 80px 80px, 95px 95px;
         animation: smallParticlesMobile 40s linear infinite;
+    }
+    
+    /* Mobile particle optimization */
+    .hero .floating-particles::before,
+    .products .floating-particles::before,
+    .testimonials .floating-particles::before,
+    .gallery .floating-particles::before,
+    .about .floating-particles::before,
+    .contact .floating-particles::before,
+    .footer .floating-particles::before {
+        animation-duration: 45s; /* Slower animations on mobile for better performance */
     }
     
     @keyframes globalParticlesMobile {
