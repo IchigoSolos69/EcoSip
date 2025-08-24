@@ -169,11 +169,74 @@ body {
 }
 
 .gradient-text {
-    background: var(--gradient-primary);
+    background: linear-gradient(135deg, var(--neon-green) 0%, var(--aqua-blue) 50%, var(--neon-green) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     position: relative;
+    font-weight: 900;
+    text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+    animation: gradientGlow 2s ease-in-out infinite;
+}
+
+@keyframes gradientGlow {
+    0%, 100% { 
+        filter: brightness(1) saturate(1);
+    }
+    50% { 
+        filter: brightness(1.2) saturate(1.3);
+    }
+}
+
+/* Section Titles - Enhanced Cooler & Bolder */
+.section-title {
+    font-size: 4rem;
+    font-weight: 900;
+    text-align: center;
+    margin-bottom: 3rem;
+    color: #ffffff;
+    position: relative;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    animation: titleGlow 3s ease-in-out infinite;
+    text-shadow: 0 0 30px rgba(0, 255, 136, 0.4);
+}
+
+.section-title::before {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, var(--neon-green), var(--aqua-blue), transparent);
+    border-radius: 2px;
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.8);
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--aqua-blue), var(--neon-green), transparent);
+    border-radius: 1px;
+    opacity: 0.7;
+}
+
+@keyframes titleGlow {
+    0%, 100% { 
+        text-shadow: 0 0 30px rgba(0, 255, 136, 0.4);
+        transform: scale(1);
+    }
+    50% { 
+        text-shadow: 0 0 50px rgba(0, 255, 136, 0.7), 0 0 70px rgba(0, 212, 255, 0.3);
+        transform: scale(1.02);
+    }
 }
 
 .hero-subtitle {
@@ -597,7 +660,7 @@ body {
     }
     75% { 
         transform: translateY(-15px) translateX(15px); 
-        opacity: 0.7;
+    opacity: 0.7;
     }
 }
 
@@ -711,12 +774,12 @@ body {
 
 .about-stats {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Ensure 2x2 grid layout */
+    grid-template-columns: repeat(4, 1fr); /* Changed to 1x4 horizontal layout */
     gap: 20px; /* Increased gap for better spacing when below text */
     position: static; /* Changed from sticky to static */
     align-self: start;
     min-width: auto; /* Allow natural width */
-    max-width: 600px; /* Set max width for better layout */
+    max-width: 100%; /* Full width for horizontal layout */
     margin: 0 auto; /* Center the stats section */
 }
 
@@ -759,7 +822,7 @@ body {
 
 /* Responsive adjustments - Desktop only */
 @media (max-width: 1400px) {
-    .about-content {
+.about-content {
         grid-template-columns: 1fr; /* Keep single column */
         gap: 40px;
     }
@@ -801,7 +864,7 @@ body {
 /* Mobile layout - NO CHANGES as requested */
 @media (max-width: 768px) {
     .about-stats {
-        grid-template-columns: repeat(2, 1fr); /* Keep 2x2 on mobile */
+        grid-template-columns: repeat(4, 1fr); /* Changed to 1x4 horizontal layout */
         gap: 10px; /* Reduced from 12px */
         max-width: 100%;
     }
@@ -2390,7 +2453,7 @@ body {
     }
     
     .testimonials .stat-number {
-        font-size: 2.5rem;
+    font-size: 2.5rem;
     }
     
     .testimonials .stat-label {
@@ -4238,13 +4301,12 @@ body {
 
 .about-stats {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Ensure 2x2 grid layout */
+    grid-template-columns: repeat(4, 1fr); /* Changed to 1x4 horizontal layout */
     gap: 12px; /* Reduced from 20px */
-    position: sticky;
-    top: 100px;
+    position: static; /* Changed from sticky to static */
     align-self: start;
     min-width: auto; /* Allow natural width */
-    max-width: 600px; /* Set max width for better layout */
+    max-width: 100%; /* Full width for horizontal layout */
     margin: 0 auto; /* Center the stats section */
 }
 
@@ -4293,9 +4355,9 @@ body {
     }
     
     .about-stats {
-        grid-template-columns: repeat(2, 1fr); /* Keep 2x2 on larger screens */
+        grid-template-columns: repeat(4, 1fr); /* Keep 1x4 on larger screens */
         gap: 18px; /* Slightly reduced gap */
-        max-width: 550px; /* Adjusted max width */
+        max-width: 100%; /* Full width for horizontal layout */
     }
     
     .stat-card {
@@ -4329,7 +4391,7 @@ body {
 /* Mobile layout - NO CHANGES as requested */
 @media (max-width: 768px) {
     .about-stats {
-        grid-template-columns: repeat(2, 1fr); /* Keep 2x2 on mobile */
+        grid-template-columns: repeat(4, 1fr); /* Changed to 1x4 horizontal layout */
         gap: 10px; /* Reduced from 12px */
         max-width: 100%;
     }
@@ -4634,6 +4696,57 @@ body::before {
     .footer::before {
         opacity: 0.3; /* Reduce opacity on mobile for better performance */
         animation-duration: 30s; /* Slower animation on mobile */
+    }
+}
+
+@media (max-width: 768px) {
+    .section-title {
+        font-size: 2.5rem;
+        margin-bottom: 2rem;
+        letter-spacing: 1px;
+    }
+    
+    .section-title::before {
+        width: 90%;
+        height: 3px;
+        bottom: -12px;
+    }
+    
+    .section-title::after {
+        width: 70%;
+        height: 1.5px;
+        bottom: -20px;
+    }
+    
+    .about-stats {
+        grid-template-columns: repeat(4, 1fr); /* Changed to 1x4 horizontal layout */
+        gap: 10px; /* Reduced from 12px */
+        max-width: 100%;
+    }
+    
+    .stat-card {
+        min-width: 100%;
+        max-width: 100%;
+        padding: 12px; /* Reduced from 16px */
+    }
+    
+    .stat-number {
+        font-size: 1rem; /* Reduced from 1.2rem */
+    }
+    
+    .stat-label {
+        font-size: 0.6rem; /* Reduced from 0.7rem */
+    }
+    
+    .mission-grid {
+        grid-template-columns: 1fr; /* Single column on mobile */
+        gap: 20px;
+    }
+    
+    .mission-card {
+        min-height: auto;
+        padding: 25px;
+        min-width: 100%; /* Full width on mobile */
     }
 }
 
