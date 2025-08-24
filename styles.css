@@ -678,8 +678,8 @@ body {
 /* About Section Layout */
 .about-content {
     display: grid;
-    grid-template-columns: 1fr 280px; /* Reduced from 300px to make stats smaller */
-    gap: 50px;
+    grid-template-columns: 1fr; /* Changed from 1fr 280px to single column */
+    gap: 40px; /* Reduced gap since cards are now below text */
     align-items: start;
     margin-top: 40px;
 }
@@ -712,12 +712,12 @@ body {
 .about-stats {
     display: grid;
     grid-template-columns: repeat(2, 1fr); /* Ensure 2x2 grid layout */
-    gap: 12px; /* Reduced from 20px */
-    position: sticky;
-    top: 100px;
+    gap: 20px; /* Increased gap for better spacing when below text */
+    position: static; /* Changed from sticky to static */
     align-self: start;
-    min-width: 240px; /* Reduced from 260px */
-    max-width: 280px; /* Reduced from 300px */
+    min-width: auto; /* Allow natural width */
+    max-width: 600px; /* Set max width for better layout */
+    margin: 0 auto; /* Center the stats section */
 }
 
 .stat-card {
@@ -729,7 +729,7 @@ body {
     backdrop-filter: blur(10px);
     box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
     transition: all 0.3s ease;
-    min-width: 220px; /* Reduced from 240px */
+    min-width: auto; /* Allow natural width */
     position: relative;
     z-index: 2;
 }
@@ -760,25 +760,18 @@ body {
 /* Responsive adjustments - Desktop only */
 @media (max-width: 1400px) {
     .about-content {
-        grid-template-columns: 1fr 260px; /* Further reduced for smaller stats */
-        gap: 50px;
+        grid-template-columns: 1fr; /* Keep single column */
+        gap: 40px;
     }
     
     .about-stats {
         grid-template-columns: repeat(2, 1fr); /* Keep 2x2 on larger screens */
-        gap: 10px; /* Reduced from 18px */
-        min-width: 220px; /* Reduced */
-        max-width: 260px; /* Reduced */
+        gap: 18px; /* Slightly reduced gap */
+        max-width: 550px; /* Adjusted max width */
     }
     
     .stat-card {
-        min-width: 200px; /* Reduced from 220px */
         padding: 12px; /* Reduced from 22px */
-    }
-    
-    .mission-card {
-        padding: 30px; /* Slightly reduced but still bigger than original */
-        min-width: 400px; /* Adjusted for medium screens */
     }
 }
 
@@ -792,22 +785,16 @@ body {
         position: static;
         grid-template-columns: repeat(2, 1fr); /* Maintain 2x2 on medium screens */
         max-width: 100%;
-        gap: 15px; /* Reduced from 25px */
+        gap: 20px; /* Increased from 15px */
         min-width: auto;
-        max-width: 500px; /* Reduced from 700px */
+        max-width: 600px; /* Increased from 500px */
         margin: 0 auto;
     }
     
     .stat-card {
-        min-width: 200px; /* Reduced from 300px */
-        flex: 1;
-        max-width: 240px; /* Reduced from 320px */
-    }
-    
-    .mission-card {
         min-width: auto; /* Allow flex to manage width */
-        padding: 25px; /* Back to original size on medium screens */
-        min-height: 280px; /* Back to original height */
+        flex: 1;
+        max-width: none; /* Remove max-width constraint */
     }
 }
 
@@ -4256,8 +4243,9 @@ body {
     position: sticky;
     top: 100px;
     align-self: start;
-    min-width: 240px; /* Reduced from 260px */
-    max-width: 280px; /* Reduced from 300px */
+    min-width: auto; /* Allow natural width */
+    max-width: 600px; /* Set max width for better layout */
+    margin: 0 auto; /* Center the stats section */
 }
 
 .stat-card {
@@ -4269,7 +4257,7 @@ body {
     backdrop-filter: blur(10px);
     box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
     transition: all 0.3s ease;
-    min-width: 220px; /* Reduced from 240px */
+    min-width: auto; /* Allow natural width */
     position: relative;
     z-index: 2;
 }
@@ -4300,25 +4288,18 @@ body {
 /* Responsive adjustments */
 @media (max-width: 1400px) {
     .about-content {
-        grid-template-columns: 1fr 260px; /* Further reduced for smaller stats */
-        gap: 50px;
+        grid-template-columns: 1fr; /* Keep single column */
+        gap: 40px;
     }
     
     .about-stats {
         grid-template-columns: repeat(2, 1fr); /* Keep 2x2 on larger screens */
-        gap: 10px; /* Reduced from 18px */
-        min-width: 220px; /* Reduced */
-        max-width: 260px; /* Reduced */
+        gap: 18px; /* Slightly reduced gap */
+        max-width: 550px; /* Adjusted max width */
     }
     
     .stat-card {
-        min-width: 200px; /* Reduced from 220px */
         padding: 12px; /* Reduced from 22px */
-    }
-    
-    .mission-card {
-        padding: 30px; /* Slightly reduced but still bigger than original */
-        min-width: 400px; /* Adjusted for medium screens */
     }
 }
 
@@ -4332,22 +4313,16 @@ body {
         position: static;
         grid-template-columns: repeat(2, 1fr); /* Maintain 2x2 on medium screens */
         max-width: 100%;
-        gap: 15px; /* Reduced from 25px */
+        gap: 20px; /* Increased from 15px */
         min-width: auto;
-        max-width: 500px; /* Reduced from 700px */
+        max-width: 600px; /* Increased from 500px */
         margin: 0 auto;
     }
     
     .stat-card {
-        min-width: 200px; /* Reduced from 300px */
-        flex: 1;
-        max-width: 240px; /* Reduced from 320px */
-    }
-    
-    .mission-card {
         min-width: auto; /* Allow flex to manage width */
-        padding: 25px; /* Back to original size on medium screens */
-        min-height: 280px; /* Back to original height */
+        flex: 1;
+        max-width: none; /* Remove max-width constraint */
     }
 }
 
