@@ -333,9 +333,9 @@ body {
 }
 
 .mission-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
 }
 
 /* About Text Section */
@@ -450,7 +450,7 @@ body {
         rgba(0, 212, 255, 0.05) 100%);
     border: 1px solid rgba(0, 255, 136, 0.2);
     border-radius: 20px;
-    padding: 30px;
+    padding: 25px;
     transition: all 0.3s ease;
     backdrop-filter: blur(10px);
     position: relative;
@@ -475,22 +475,22 @@ body {
 
 .mission-card:hover {
     background: linear-gradient(135deg, 
-        rgba(0, 255, 136, 0.1) 0%,
-        rgba(0, 212, 255, 0.1) 100%);
-    border-color: rgba(0, 255, 136, 0.4);
+        rgba(0, 255, 136, 0.15) 0%,
+        rgba(0, 212, 255, 0.15) 100%);
+    border-color: rgba(0, 255, 136, 0.6);
     transform: translateY(-5px);
-    box-shadow: 0 15px 30px rgba(0, 255, 136, 0.1);
+    box-shadow: 0 15px 30px rgba(0, 255, 136, 0.2);
 }
 
 .card-icon {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     background: linear-gradient(135deg, #00ff88, #00d4ff);
-    border-radius: 15px;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     position: relative;
     overflow: hidden;
 }
@@ -511,26 +511,27 @@ body {
 }
 
 .card-title {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     font-weight: 700;
     color: #00ff88;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
     text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
 }
 
 .card-description {
     color: #ffffff;
-    line-height: 1.6;
-    margin-bottom: 20px;
+    line-height: 1.5;
+    margin-bottom: 15px;
     opacity: 0.9;
+    font-size: 0.9rem;
 }
 
 /* Card Features - Side by Side Layout */
 .card-features {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 15px;
+    gap: 6px;
+    margin-top: 12px;
 }
 
 .feature {
@@ -538,9 +539,9 @@ body {
         rgba(0, 255, 136, 0.2) 0%,
         rgba(0, 212, 255, 0.15) 100%);
     border: 1px solid rgba(0, 255, 136, 0.4);
-    border-radius: 15px;
-    padding: 8px 14px;
-    font-size: 0.85rem;
+    border-radius: 12px;
+    padding: 6px 10px;
+    font-size: 0.75rem;
     color: #00ff88;
     font-weight: 600;
     transition: all 0.3s ease;
@@ -569,11 +570,11 @@ body {
 
 .feature:hover {
     background: linear-gradient(135deg, 
-        rgba(0, 255, 136, 0.25) 0%,
-        rgba(0, 212, 255, 0.2) 100%);
-    border-color: rgba(0, 255, 136, 0.5);
+        rgba(0, 255, 136, 0.3) 0%,
+        rgba(0, 212, 255, 0.25) 100%);
+    border-color: rgba(0, 255, 136, 0.6);
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 255, 136, 0.2);
+    box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
     color: #00ff88;
 }
 
@@ -584,23 +585,28 @@ body {
         gap: 40px;
     }
     
+    .mission-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
     .mission-card {
-        padding: 25px;
+        padding: 20px;
     }
     
     .card-title {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
     }
     
     .card-features {
-        gap: 6px;
-        margin-top: 12px;
+        gap: 5px;
+        margin-top: 10px;
     }
     
     .feature {
-        padding: 6px 12px;
-        font-size: 0.8rem;
-        border-radius: 12px;
+        padding: 5px 8px;
+        font-size: 0.7rem;
+        border-radius: 10px;
     }
 }
 
