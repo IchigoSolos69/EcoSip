@@ -1720,7 +1720,7 @@ body {
 
 .testimonials-stats {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 2rem;
     margin-top: 3rem;
 }
@@ -1952,14 +1952,17 @@ body {
 
 .contact-hero {
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: repeat(2, 1fr);
     gap: 3rem;
     align-items: center;
     margin-bottom: 4rem;
     padding: 3rem;
-    background: rgba(17, 17, 17, 0.8);
-    border-radius: 25px;
-    border: 1px solid rgba(0, 255, 136, 0.2);
+    background: rgba(17, 17, 17, 0.6);
+    border-radius: 20px;
+    border: 1px solid rgba(0, 255, 136, 0.1);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
     backdrop-filter: blur(10px);
 }
 
@@ -2884,6 +2887,11 @@ textarea.form-input {
     .contact-bottle-icon img {
         width: 60px;
         height: 60px;
+    }
+    
+    .testimonials-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
     }
     
     .contact-grid {
