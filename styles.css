@@ -147,14 +147,17 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4rem;
+    display: flex;
+    justify-content: center;
     align-items: center;
+    min-height: 100vh;
 }
 
 .hero-content {
+    text-align: center;
+    max-width: 800px;
     z-index: 2;
+    margin-top: 80px; /* Shift text down */
 }
 
 .hero-title {
@@ -177,7 +180,10 @@ body {
     font-size: 1.2rem;
     color: var(--text-secondary);
     margin-bottom: 2.5rem;
-    max-width: 500px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
 }
 
 .hero-buttons {
@@ -598,13 +604,21 @@ body {
 /* Mobile Responsive */
 @media (max-width: 768px) {
     .hero-container {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-    text-align: center;
+        text-align: center;
+        padding: 0 20px;
+    }
+    
+    .hero-content {
+        margin-top: 60px; /* Slightly less margin on mobile */
     }
     
     .hero-title {
         font-size: 2.5rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
     }
     
     .interactive-bottle {
@@ -702,39 +716,72 @@ body {
     position: sticky;
     top: 100px;
     align-self: start;
-    min-width: 350px;
-    max-width: 400px;
+    min-width: 300px; /* Reduced from 350px */
+    max-width: 350px; /* Reduced from 400px */
 }
 
 .stat-card {
     background: rgba(0, 0, 0, 0.6);
     border: 2px solid var(--neon-green);
     border-radius: 15px;
-    padding: 25px;
+    padding: 20px; /* Reduced from 25px */
     text-align: center;
     backdrop-filter: blur(10px);
     box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
     transition: all 0.3s ease;
-    min-width: 350px;
+    min-width: 280px; /* Reduced from 350px */
     position: relative;
     z-index: 2;
+}
+
+.stat-icon {
+    font-size: 2rem; /* Reduced from larger size */
+    margin-bottom: 15px; /* Reduced from 20px */
+    display: block;
+}
+
+.stat-number {
+    font-size: 1.6rem; /* Reduced from 1.8rem */
+    font-weight: 700;
+    color: #00ff88;
+    display: block;
+    margin-bottom: 0.5rem;
+    word-break: keep-all;
+    white-space: nowrap;
+}
+
+.stat-label {
+    font-size: 0.8rem; /* Reduced from 0.85rem */
+    color: #ffffff;
+    opacity: 0.9;
+    line-height: 1.4;
 }
 
 /* Responsive adjustments */
 @media (max-width: 1400px) {
     .about-content {
-        grid-template-columns: 1fr 350px;
+        grid-template-columns: 1fr 300px; /* Reduced from 350px */
         gap: 60px;
     }
     
     .about-stats {
         grid-template-columns: repeat(2, 1fr); /* Keep 2x2 on larger screens */
         gap: 15px;
+        min-width: 280px; /* Reduced */
+        max-width: 300px; /* Reduced */
     }
     
     .stat-card {
-        min-width: 300px;
-        padding: 20px;
+        min-width: 250px; /* Reduced from 300px */
+        padding: 18px; /* Reduced from 20px */
+    }
+    
+    .stat-number {
+        font-size: 1.5rem; /* Reduced */
+    }
+    
+    .stat-label {
+        font-size: 0.75rem; /* Reduced */
     }
 }
 
@@ -749,25 +796,37 @@ body {
         grid-template-columns: repeat(2, 1fr); /* Maintain 2x2 on medium screens */
         max-width: 100%;
         gap: 20px;
+        min-width: auto;
+        max-width: 600px; /* Allow more width on medium screens */
+        margin: 0 auto;
     }
     
     .stat-card {
-        min-width: 280px;
+        min-width: 250px; /* Reduced from 280px */
         flex: 1;
-        max-width: 300px;
+        max-width: 280px; /* Reduced from 300px */
     }
 }
 
 @media (max-width: 768px) {
     .about-stats {
-        grid-template-columns: 1fr; /* Single column on mobile */
+        grid-template-columns: repeat(2, 1fr); /* Keep 2x2 on mobile */
         gap: 15px;
+        max-width: 100%;
     }
     
     .stat-card {
         min-width: 100%;
         max-width: 100%;
-        padding: 20px;
+        padding: 18px;
+    }
+    
+    .stat-number {
+        font-size: 1.4rem; /* Reduced for mobile */
+    }
+    
+    .stat-label {
+        font-size: 0.75rem; /* Reduced for mobile */
     }
 }
 
